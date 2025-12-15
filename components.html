@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rails Components - Ruby on Rails Cheat Sheet</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="main-nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-brand">
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="rubyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#CC342D"/>
+                            <stop offset="50%" style="stop-color:#D30001"/>
+                            <stop offset="100%" style="stop-color:#8B0000"/>
+                        </linearGradient>
+                    </defs>
+                    <polygon points="50,5 95,35 95,75 50,95 5,75 5,35" fill="url(#rubyGrad)" stroke="#8B0000" stroke-width="2"/>
+                </svg>
+                Rails Cheat Sheet
+            </a>
+            <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('active')">☰</button>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="generate-commands.html">Commands</a></li>
+                <li><a href="naming-conventions.html">Naming</a></li>
+                <li><a href="routes.html">Routes</a></li>
+                <li><a href="models.html">Models</a></li>
+                <li><a href="controllers-views.html">Controllers</a></li>
+                <li><a href="helpers.html">Helpers</a></li>
+                <li><a href="components.html" class="active">Components</a></li>
+                <li><a href="quick-reference.html">Reference</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <header class="page-header">
+        <div class="page-header-content">
+            <h1>Rails Components</h1>
+            <p class="page-description">Hotwire, Turbo, Action Cable, Active Storage, Mailer, Jobs & more</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <section class="section">
+            <div class="component-grid">
+                <div class="component-card hotwire">
+                    <h3>⚡ Hotwire</h3>
+                    <p class="description">The default Rails 7 frontend stack combining Turbo and Stimulus for fast, SPA-like experiences without writing JavaScript for common interactions.</p>
+                    <div class="usage">
+<span style="color: var(--text-muted);"># Gemfile</span>
+gem "turbo-rails"
+gem "stimulus-rails"
+
+<span style="color: var(--text-muted);"># Install</span>
+rails turbo:install
+rails stimulus:install
+                    </div>
+                </div>
+
+                <div class="component-card turbo">
+                    <h3>🚀 Turbo</h3>
+                    <p class="description">Navigate without full page reloads. Turbo Drive intercepts links, Turbo Frames update page sections, Turbo Streams broadcast changes in real-time.</p>
+                    <div class="usage">
+<span style="color: var(--text-muted);"># Turbo Frame in view</span>
+&lt;%= turbo_frame_tag "products" do %&gt;
+  &lt;%= render @products %&gt;
+&lt;% end %&gt;
+
+<span style="color: var(--text-muted);"># Turbo Stream response</span>
+&lt;%= turbo_stream.append "products", @product %&gt;
+&lt;%= turbo_stream.replace "product_1", @product %&gt;
+                    </div>
+                </div>
+
+                <div class="component-card activerecord">
+                    <h3>🗄️ Active Record</h3>
+                    <p class="description">ORM layer mapping Ruby objects to database tables. Handles queries, validations, associations, callbacks, and migrations.</p>
+                    <div class="usage">
+<span style="color: var(--text-muted);"># Model with validations & associations</span>
+class Product < ApplicationRecord
+  belongs_to :category
+  has_many :line_items
+  
+  validates :name, presence: true
+  validates :price, numericality: { greater_than: 0 }
+  
+  scope :active, -> { where(active: true) }
+end
+
+<span style="color: var(--text-muted);"># Queries</span>
+Product.where(active: true).order(:name).limit(10)
+Product.find_by(sku: "ABC123")
+                    </div>
+                </div>
+
+                <div class="component-card actioncable">
+                    <h3>📡 Action Cable</h3>
+                    <p class="description">WebSocket framework for real-time features. Enables live updates, chat, notifications, and collaborative editing.</p>
+                    <div class="usage">
+<span style="color: var(--text-muted);"># Generate channel</span>
+rails g channel Notifications
+
+<span style="color: var(--text-muted);"># app/channels/notifications_channel.rb</span>
+class NotificationsChannel < ApplicationCable::Channel
+  def subscribed
+    stream_from "notifications_#{current_user.id}"
+  end
+end
+
+<span style="color: var(--text-muted);"># Broadcast from anywhere</span>
+ActionCable.server.broadcast(
+  "notifications_#{user.id}",
+  { message: "New order received!" }
+)
+                    </div>
+                </div>
+
+                <div class="component-card activestorage">
+                    <h3>📎 Active Storage</h3>
+                    <p class="description">File upload handling for local disk, Amazon S3, Google Cloud, Azure. Supports image variants, direct uploads, and file analysis.</p>
+                    <div class="usage">
+<span style="color: var(--text-muted);"># Setup</span>
+rails active_storage:install
+rails db:migrate
+
+<span style="color: var(--text-muted);"># Model</span>
+class Product < ApplicationRecord
+  has_one_attached :image
+  has_many_attached :documents
+end
+
+<span style="color: var(--text-muted);"># View</span>
+&lt;%= image_tag @product.image.variant(resize_to_limit: [300, 300]) %&gt;
+&lt;%= f.file_field :image, direct_upload: true %&gt;
+                    </div>
+                </div>
+
+                <div class="component-card authentication">
+                    <h3>🔐 Authentication (Rails 8)</h3>
+                    <p class="description">Built-in authentication generator in Rails 8. Creates User model, sessions, password resets, and secure defaults.</p>
+                    <div class="usage">
+<span style="color: var(--text-muted);"># Generate authentication</span>
+rails generate authentication
+
+<span style="color: var(--text-muted);"># Creates:</span>
+- User model with has_secure_password
+- SessionsController
+- PasswordsController  
+- Authentication concern
+- Views for login/signup/reset
+
+<span style="color: var(--text-muted);"># Controller concern</span>
+class ApplicationController < ActionController::Base
+  include Authentication
+end
+                    </div>
+                </div>
+
+                <div class="component-card actionmailer">
+                    <h3>📧 Action Mailer</h3>
+                    <p class="description">Email sending framework with HTML/text templates, attachments, previews, and delivery configuration for various providers.</p>
+                    <div class="usage">
+<span style="color: var(--text-muted);"># Generate mailer</span>
+rails g mailer Order confirmation shipped
+
+<span style="color: var(--text-muted);"># app/mailers/order_mailer.rb</span>
+class OrderMailer < ApplicationMailer
+  def confirmation(order)
+    @order = order
+    mail(to: order.email, subject: "Order Confirmed")
+  end
+end
+
+<span style="color: var(--text-muted);"># Send email</span>
+OrderMailer.confirmation(@order).deliver_later
+                    </div>
+                </div>
+
+                <div class="component-card activejob">
+                    <h3>⏱️ Active Job</h3>
+                    <p class="description">Background job framework. Process async tasks like emails, reports, imports. Works with Sidekiq, Resque, Solid Queue, etc.</p>
+                    <div class="usage">
+<span style="color: var(--text-muted);"># Generate job</span>
+rails g job ProcessOrder
+
+<span style="color: var(--text-muted);"># app/jobs/process_order_job.rb</span>
+class ProcessOrderJob < ApplicationJob
+  queue_as :default
+  
+  def perform(order_id)
+    order = Order.find(order_id)
+    order.process!
+  end
+end
+
+<span style="color: var(--text-muted);"># Enqueue job</span>
+ProcessOrderJob.perform_later(@order.id)
+ProcessOrderJob.set(wait: 1.hour).perform_later(@order.id)
+                    </div>
+                </div>
+
+                <div class="component-card sessions">
+                    <h3>🔑 Sessions</h3>
+                    <p class="description">Store user data across requests. Configurable storage backends: cookies (default), cache, database, Redis.</p>
+                    <div class="usage">
+<span style="color: var(--text-muted);"># Store in session</span>
+session[:user_id] = @user.id
+session[:cart] = []
+
+<span style="color: var(--text-muted);"># Read from session</span>
+current_user_id = session[:user_id]
+
+<span style="color: var(--text-muted);"># Clear session</span>
+session.delete(:user_id)
+reset_session  <span style="color: var(--text-muted);"># Clear everything</span>
+
+<span style="color: var(--text-muted);"># config/initializers/session_store.rb</span>
+Rails.application.config.session_store :cookie_store,
+  key: '_myapp_session',
+  expire_after: 14.days
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>Ruby on Rails Cheat Sheet • Created with <span class="heart">❤️</span> for Michael Blake at Fastell Industrial Supplies</p>
+        </footer>
+    </div>
+</body>
+</html>
+

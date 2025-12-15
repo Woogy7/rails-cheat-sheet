@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Models & Active Record - Ruby on Rails Cheat Sheet</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="main-nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-brand">
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="rubyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#CC342D"/>
+                            <stop offset="50%" style="stop-color:#D30001"/>
+                            <stop offset="100%" style="stop-color:#8B0000"/>
+                        </linearGradient>
+                    </defs>
+                    <polygon points="50,5 95,35 95,75 50,95 5,75 5,35" fill="url(#rubyGrad)" stroke="#8B0000" stroke-width="2"/>
+                </svg>
+                Rails Cheat Sheet
+            </a>
+            <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('active')">☰</button>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="generate-commands.html">Commands</a></li>
+                <li><a href="naming-conventions.html">Naming</a></li>
+                <li><a href="routes.html">Routes</a></li>
+                <li><a href="models.html" class="active">Models</a></li>
+                <li><a href="controllers-views.html">Controllers</a></li>
+                <li><a href="helpers.html">Helpers</a></li>
+                <li><a href="components.html">Components</a></li>
+                <li><a href="quick-reference.html">Reference</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <header class="page-header">
+        <div class="page-header-content">
+            <h1>Models & Active Record</h1>
+            <p class="page-description">Data layer with associations, validations, scopes, and callbacks</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <section class="section">
+            <p style="color: var(--text-secondary); margin-bottom: 1.5rem; font-size: 0.95rem;">Models in <code>app/models/</code> handle data, validations, associations, and business logic:</p>
+
+            <div class="view-templates-grid">
+                <div class="view-template-card">
+                    <div class="view-template-header">
+                        <span class="view-filename">Associations</span>
+                    </div>
+                    <div class="view-template-code">
+<span class="comment"># app/models/product.rb</span>
+<span class="keyword">class</span> <span class="method">Product</span> &lt; <span class="method">ApplicationRecord</span>
+  <span class="comment"># Belongs to one category (product has category_id column)</span>
+  <span class="method">belongs_to</span> <span class="symbol">:category</span>
+  <span class="method">belongs_to</span> <span class="symbol">:category</span>, <span class="symbol">optional:</span> <span class="keyword">true</span>  <span class="comment"># Allow nil</span>
+
+  <span class="comment"># Has one related record</span>
+  <span class="method">has_one</span> <span class="symbol">:inventory</span>
+  <span class="method">has_one</span> <span class="symbol">:supplier</span>, <span class="symbol">through:</span> <span class="symbol">:inventory</span>
+
+  <span class="comment"># Has many related records</span>
+  <span class="method">has_many</span> <span class="symbol">:line_items</span>
+  <span class="method">has_many</span> <span class="symbol">:line_items</span>, <span class="symbol">dependent:</span> <span class="symbol">:destroy</span>  <span class="comment"># Delete when parent deleted</span>
+
+  <span class="comment"># Has many through (many-to-many via join model)</span>
+  <span class="method">has_many</span> <span class="symbol">:line_items</span>
+  <span class="method">has_many</span> <span class="symbol">:orders</span>, <span class="symbol">through:</span> <span class="symbol">:line_items</span>
+
+  <span class="comment"># Direct many-to-many (join table: categories_products)</span>
+  <span class="method">has_and_belongs_to_many</span> <span class="symbol">:tags</span>
+<span class="keyword">end</span>
+
+<span class="comment"># app/models/category.rb</span>
+<span class="keyword">class</span> <span class="method">Category</span> &lt; <span class="method">ApplicationRecord</span>
+  <span class="method">has_many</span> <span class="symbol">:products</span>
+<span class="keyword">end</span>
+                    </div>
+                </div>
+
+                <div class="view-template-card">
+                    <div class="view-template-header">
+                        <span class="view-filename">Active Storage</span>
+                    </div>
+                    <div class="view-template-code">
+<span class="comment"># Setup: rails active_storage:install && rails db:migrate</span>
+
+<span class="comment"># app/models/product.rb</span>
+<span class="keyword">class</span> <span class="method">Product</span> &lt; <span class="method">ApplicationRecord</span>
+  <span class="comment"># Single file attachment</span>
+  <span class="method">has_one_attached</span> <span class="symbol">:image</span>
+  <span class="method">has_one_attached</span> <span class="symbol">:thumbnail</span>
+
+  <span class="comment"># Multiple file attachments</span>
+  <span class="method">has_many_attached</span> <span class="symbol">:documents</span>
+  <span class="method">has_many_attached</span> <span class="symbol">:photos</span>
+<span class="keyword">end</span>
+
+<span class="comment"># In controller</span>
+<span class="keyword">def</span> <span class="method">product_params</span>
+  params.<span class="method">require</span>(<span class="symbol">:product</span>).<span class="method">permit</span>(<span class="symbol">:name</span>, <span class="symbol">:image</span>, <span class="symbol">documents:</span> [])
+<span class="keyword">end</span>
+
+<span class="comment"># In views</span>
+&lt;%= <span class="method">image_tag</span> <span class="variable">@product</span>.image <span class="keyword">if</span> <span class="variable">@product</span>.image.<span class="method">attached?</span> %&gt;
+&lt;%= <span class="method">image_tag</span> <span class="variable">@product</span>.image.<span class="method">variant</span>(<span class="symbol">resize_to_limit:</span> [<span class="number">300</span>, <span class="number">300</span>]) %&gt;
+&lt;%= f.<span class="method">file_field</span> <span class="symbol">:image</span>, <span class="symbol">direct_upload:</span> <span class="keyword">true</span> %&gt;
+                    </div>
+                </div>
+
+                <div class="view-template-card">
+                    <div class="view-template-header">
+                        <span class="view-filename">Validations</span>
+                    </div>
+                    <div class="view-template-code">
+<span class="comment"># app/models/product.rb</span>
+<span class="keyword">class</span> <span class="method">Product</span> &lt; <span class="method">ApplicationRecord</span>
+  <span class="comment"># Presence - field cannot be blank</span>
+  <span class="method">validates</span> <span class="symbol">:name</span>, <span class="symbol">presence:</span> <span class="keyword">true</span>
+  <span class="method">validates</span> <span class="symbol">:name</span>, <span class="symbol">:description</span>, <span class="symbol">presence:</span> <span class="keyword">true</span>  <span class="comment"># Multiple fields</span>
+
+  <span class="comment"># Uniqueness</span>
+  <span class="method">validates</span> <span class="symbol">:sku</span>, <span class="symbol">uniqueness:</span> <span class="keyword">true</span>
+  <span class="method">validates</span> <span class="symbol">:sku</span>, <span class="symbol">uniqueness:</span> { <span class="symbol">scope:</span> <span class="symbol">:category_id</span> }  <span class="comment"># Unique per category</span>
+
+  <span class="comment"># Numericality</span>
+  <span class="method">validates</span> <span class="symbol">:price</span>, <span class="symbol">numericality:</span> <span class="keyword">true</span>
+  <span class="method">validates</span> <span class="symbol">:price</span>, <span class="symbol">numericality:</span> { <span class="symbol">greater_than:</span> <span class="number">0</span> }
+  <span class="method">validates</span> <span class="symbol">:quantity</span>, <span class="symbol">numericality:</span> { <span class="symbol">only_integer:</span> <span class="keyword">true</span>, <span class="symbol">greater_than_or_equal_to:</span> <span class="number">0</span> }
+
+  <span class="comment"># Length</span>
+  <span class="method">validates</span> <span class="symbol">:name</span>, <span class="symbol">length:</span> { <span class="symbol">minimum:</span> <span class="number">2</span>, <span class="symbol">maximum:</span> <span class="number">100</span> }
+  <span class="method">validates</span> <span class="symbol">:description</span>, <span class="symbol">length:</span> { <span class="symbol">maximum:</span> <span class="number">1000</span> }
+
+  <span class="comment"># Format with regex</span>
+  <span class="method">validates</span> <span class="symbol">:email</span>, <span class="symbol">format:</span> { <span class="symbol">with:</span> <span class="string">/\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i</span> }
+
+  <span class="comment"># Inclusion/Exclusion</span>
+  <span class="method">validates</span> <span class="symbol">:status</span>, <span class="symbol">inclusion:</span> { <span class="symbol">in:</span> %w[draft published archived] }
+
+  <span class="comment"># Custom validation method</span>
+  <span class="method">validate</span> <span class="symbol">:price_must_be_reasonable</span>
+
+  <span class="keyword">private</span>
+
+  <span class="keyword">def</span> <span class="method">price_must_be_reasonable</span>
+    <span class="keyword">if</span> price.present? && price &gt; <span class="number">10000</span>
+      errors.<span class="method">add</span>(<span class="symbol">:price</span>, <span class="string">"seems too high"</span>)
+    <span class="keyword">end</span>
+  <span class="keyword">end</span>
+<span class="keyword">end</span>
+                    </div>
+                </div>
+
+                <div class="view-template-card">
+                    <div class="view-template-header">
+                        <span class="view-filename">Scopes</span>
+                    </div>
+                    <div class="view-template-code">
+<span class="comment"># app/models/product.rb</span>
+<span class="keyword">class</span> <span class="method">Product</span> &lt; <span class="method">ApplicationRecord</span>
+  <span class="comment"># Basic scopes</span>
+  <span class="method">scope</span> <span class="symbol">:active</span>, -&gt; { <span class="method">where</span>(<span class="symbol">active:</span> <span class="keyword">true</span>) }
+  <span class="method">scope</span> <span class="symbol">:inactive</span>, -&gt; { <span class="method">where</span>(<span class="symbol">active:</span> <span class="keyword">false</span>) }
+
+  <span class="comment"># Scopes with conditions</span>
+  <span class="method">scope</span> <span class="symbol">:expensive</span>, -&gt; { <span class="method">where</span>(<span class="string">"price > ?"</span>, <span class="number">100</span>) }
+  <span class="method">scope</span> <span class="symbol">:cheap</span>, -&gt; { <span class="method">where</span>(<span class="string">"price <= ?"</span>, <span class="number">20</span>) }
+
+  <span class="comment"># Scopes with ordering</span>
+  <span class="method">scope</span> <span class="symbol">:newest</span>, -&gt; { <span class="method">order</span>(<span class="symbol">created_at:</span> <span class="symbol">:desc</span>) }
+  <span class="method">scope</span> <span class="symbol">:by_name</span>, -&gt; { <span class="method">order</span>(<span class="symbol">:name</span>) }
+
+  <span class="comment"># Scope with parameter</span>
+  <span class="method">scope</span> <span class="symbol">:in_category</span>, -&gt;(category_id) { <span class="method">where</span>(<span class="symbol">category_id:</span> category_id) }
+  <span class="method">scope</span> <span class="symbol">:price_between</span>, -&gt;(min, max) { <span class="method">where</span>(<span class="symbol">price:</span> min..max) }
+
+  <span class="comment"># Scope with joins</span>
+  <span class="method">scope</span> <span class="symbol">:with_orders</span>, -&gt; { <span class="method">joins</span>(<span class="symbol">:orders</span>).<span class="method">distinct</span> }
+<span class="keyword">end</span>
+
+<span class="comment"># Usage - scopes are chainable!</span>
+Product.<span class="method">active</span>
+Product.<span class="method">active</span>.<span class="method">expensive</span>.<span class="method">newest</span>
+Product.<span class="method">in_category</span>(<span class="number">5</span>).<span class="method">active</span>.<span class="method">limit</span>(<span class="number">10</span>)
+                    </div>
+                </div>
+
+                <div class="view-template-card">
+                    <div class="view-template-header">
+                        <span class="view-filename">Callbacks</span>
+                    </div>
+                    <div class="view-template-code">
+<span class="comment"># app/models/product.rb</span>
+<span class="keyword">class</span> <span class="method">Product</span> &lt; <span class="method">ApplicationRecord</span>
+  <span class="comment"># Before callbacks - run before action</span>
+  <span class="method">before_validation</span> <span class="symbol">:normalize_name</span>
+  <span class="method">before_save</span> <span class="symbol">:set_slug</span>
+  <span class="method">before_create</span> <span class="symbol">:set_defaults</span>
+
+  <span class="comment"># After callbacks - run after action</span>
+  <span class="method">after_create</span> <span class="symbol">:send_notification</span>
+  <span class="method">after_save</span> <span class="symbol">:update_search_index</span>
+  <span class="method">after_destroy</span> <span class="symbol">:cleanup_files</span>
+
+  <span class="comment"># Around callbacks - wrap the action</span>
+  <span class="method">around_save</span> <span class="symbol">:log_changes</span>
+
+  <span class="comment"># Conditional callbacks</span>
+  <span class="method">after_create</span> <span class="symbol">:send_welcome_email</span>, <span class="symbol">if:</span> <span class="symbol">:email_notifications?</span>
+  <span class="method">before_save</span> <span class="symbol">:encrypt_data</span>, <span class="symbol">if:</span> -&gt; { sensitive_data_changed? }
+
+  <span class="keyword">private</span>
+
+  <span class="keyword">def</span> <span class="method">normalize_name</span>
+    self.name = name.<span class="method">strip</span>.<span class="method">titleize</span> <span class="keyword">if</span> name.<span class="method">present?</span>
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="method">set_slug</span>
+    self.slug = name.<span class="method">parameterize</span> <span class="keyword">if</span> name_changed?
+  <span class="keyword">end</span>
+
+  <span class="keyword">def</span> <span class="method">send_notification</span>
+    <span class="method">ProductMailer</span>.<span class="method">new_product</span>(self).<span class="method">deliver_later</span>
+  <span class="keyword">end</span>
+<span class="keyword">end</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>Ruby on Rails Cheat Sheet • Created with <span class="heart">❤️</span> for Michael Blake at Fastell Industrial Supplies</p>
+        </footer>
+    </div>
+</body>
+</html>
+

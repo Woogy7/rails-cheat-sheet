@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Controllers & Views - Ruby on Rails Cheat Sheet</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="main-nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-brand">
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="rubyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#CC342D"/>
+                            <stop offset="50%" style="stop-color:#D30001"/>
+                            <stop offset="100%" style="stop-color:#8B0000"/>
+                        </linearGradient>
+                    </defs>
+                    <polygon points="50,5 95,35 95,75 50,95 5,75 5,35" fill="url(#rubyGrad)" stroke="#8B0000" stroke-width="2"/>
+                </svg>
+                Rails Cheat Sheet
+            </a>
+            <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('active')">☰</button>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="generate-commands.html">Commands</a></li>
+                <li><a href="naming-conventions.html">Naming</a></li>
+                <li><a href="routes.html">Routes</a></li>
+                <li><a href="models.html">Models</a></li>
+                <li><a href="controllers-views.html" class="active">Controllers</a></li>
+                <li><a href="helpers.html">Helpers</a></li>
+                <li><a href="components.html">Components</a></li>
+                <li><a href="quick-reference.html">Reference</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <header class="page-header">
+        <div class="page-header-content">
+            <h1>Controller Actions & Views</h1>
+            <p class="page-description">RESTful actions, controller patterns, and ERB view templates</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- RESTful Actions Section -->
+        <section class="section">
+            <div class="section-header">
+                <div class="section-icon" style="background: linear-gradient(135deg, var(--accent-blue) 0%, #1F6FEB 100%);">
+                    <span>🎯</span>
+                </div>
+                <h2>Controller Actions (RESTful)</h2>
+            </div>
+
+            <div class="restful-grid">
+                <div class="action-card">
+                    <span class="action-badge get">GET</span>
+                    <div class="action-info">
+                        <h4>index</h4>
+                        <p class="path">/products → products#index</p>
+                        <p>List all resources. Typically fetches all records and renders a list view.</p>
+                    </div>
+                </div>
+
+                <div class="action-card">
+                    <span class="action-badge get">GET</span>
+                    <div class="action-info">
+                        <h4>show</h4>
+                        <p class="path">/products/:id → products#show</p>
+                        <p>Display a single resource. Fetches one record by ID.</p>
+                    </div>
+                </div>
+
+                <div class="action-card">
+                    <span class="action-badge get">GET</span>
+                    <div class="action-info">
+                        <h4>new</h4>
+                        <p class="path">/products/new → products#new</p>
+                        <p>Display form for creating a new resource. Initializes empty model instance.</p>
+                    </div>
+                </div>
+
+                <div class="action-card">
+                    <span class="action-badge post">POST</span>
+                    <div class="action-info">
+                        <h4>create</h4>
+                        <p class="path">/products → products#create</p>
+                        <p>Save new resource to database. Receives form data, validates, and persists.</p>
+                    </div>
+                </div>
+
+                <div class="action-card">
+                    <span class="action-badge get">GET</span>
+                    <div class="action-info">
+                        <h4>edit</h4>
+                        <p class="path">/products/:id/edit → products#edit</p>
+                        <p>Display form for editing existing resource. Pre-populates with current data.</p>
+                    </div>
+                </div>
+
+                <div class="action-card">
+                    <span class="action-badge patch">PATCH/PUT</span>
+                    <div class="action-info">
+                        <h4>update</h4>
+                        <p class="path">/products/:id → products#update</p>
+                        <p>Update existing resource in database. Validates and saves changes.</p>
+                    </div>
+                </div>
+
+                <div class="action-card">
+                    <span class="action-badge delete">DELETE</span>
+                    <div class="action-info">
+                        <h4>destroy</h4>
+                        <p class="path">/products/:id → products#destroy</p>
+                        <p>Remove resource from database. Typically redirects after deletion.</p>
+                    </div>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 2rem; margin-bottom: 1rem; color: var(--text-primary);">Complete Controller Example</h3>
+            <div class="routes-code">
+<span class="comment"># app/controllers/products_controller.rb</span>
+<span class="keyword">class</span> ProductsController &lt; ApplicationController
+  <span class="method">before_action</span> <span class="symbol">:set_product</span>, <span class="symbol">only:</span> [<span class="symbol">:show</span>, <span class="symbol">:edit</span>, <span class="symbol">:update</span>, <span class="symbol">:destroy</span>]
+
+  <span class="comment"># GET /products</span>
+  <span class="keyword">def</span> <span class="method">index</span>
+    <span class="variable">@products</span> = Product.<span class="method">all</span>
+  <span class="keyword">end</span>
+
+  <span class="comment"># GET /products/:id</span>
+  <span class="keyword">def</span> <span class="method">show</span>
+    <span class="comment"># @product is set by before_action</span>
+  <span class="keyword">end</span>
+
+  <span class="comment"># GET /products/new</span>
+  <span class="keyword">def</span> <span class="method">new</span>
+    <span class="variable">@product</span> = Product.<span class="method">new</span>
+  <span class="keyword">end</span>
+
+  <span class="comment"># POST /products</span>
+  <span class="keyword">def</span> <span class="method">create</span>
+    <span class="variable">@product</span> = Product.<span class="method">new</span>(product_params)
+    <span class="keyword">if</span> <span class="variable">@product</span>.<span class="method">save</span>
+      <span class="method">redirect_to</span> <span class="variable">@product</span>, <span class="symbol">notice:</span> <span class="string">"Product was successfully created."</span>
+    <span class="keyword">else</span>
+      <span class="method">render</span> <span class="symbol">:new</span>, <span class="symbol">status:</span> <span class="symbol">:unprocessable_entity</span>
+    <span class="keyword">end</span>
+  <span class="keyword">end</span>
+
+  <span class="comment"># GET /products/:id/edit</span>
+  <span class="keyword">def</span> <span class="method">edit</span>
+    <span class="comment"># @product is set by before_action</span>
+  <span class="keyword">end</span>
+
+  <span class="comment"># PATCH/PUT /products/:id</span>
+  <span class="keyword">def</span> <span class="method">update</span>
+    <span class="keyword">if</span> <span class="variable">@product</span>.<span class="method">update</span>(product_params)
+      <span class="method">redirect_to</span> <span class="variable">@product</span>, <span class="symbol">notice:</span> <span class="string">"Product was successfully updated."</span>
+    <span class="keyword">else</span>
+      <span class="method">render</span> <span class="symbol">:edit</span>, <span class="symbol">status:</span> <span class="symbol">:unprocessable_entity</span>
+    <span class="keyword">end</span>
+  <span class="keyword">end</span>
+
+  <span class="comment"># DELETE /products/:id</span>
+  <span class="keyword">def</span> <span class="method">destroy</span>
+    <span class="variable">@product</span>.<span class="method">destroy</span>
+    <span class="method">redirect_to</span> products_path, <span class="symbol">notice:</span> <span class="string">"Product was successfully deleted."</span>
+  <span class="keyword">end</span>
+
+  <span class="keyword">private</span>
+
+  <span class="comment"># Callback to set @product for show, edit, update, destroy actions</span>
+  <span class="keyword">def</span> <span class="method">set_product</span>
+    <span class="variable">@product</span> = Product.<span class="method">find</span>(params[<span class="symbol">:id</span>])
+  <span class="keyword">end</span>
+
+  <span class="comment"># Strong parameters - whitelist allowed attributes</span>
+  <span class="keyword">def</span> <span class="method">product_params</span>
+    params.<span class="method">require</span>(<span class="symbol">:product</span>).<span class="method">permit</span>(<span class="symbol">:name</span>, <span class="symbol">:description</span>, <span class="symbol">:price</span>, <span class="symbol">:category_id</span>)
+  <span class="keyword">end</span>
+<span class="keyword">end</span>
+            </div>
+
+            <h3 style="margin-top: 2rem; margin-bottom: 1rem; color: var(--text-primary);">View Templates</h3>
+            <p style="color: var(--text-secondary); margin-bottom: 1.5rem; font-size: 0.95rem;">ERB templates in <code>app/views/products/</code> that correspond to each controller action:</p>
+            
+            <div class="view-templates-grid">
+                <div class="view-template-card">
+                    <div class="view-template-header">
+                        <span class="view-filename">index.html.erb</span>
+                    </div>
+                    <div class="view-template-code">
+<span class="comment">&lt;!-- app/views/products/index.html.erb --&gt;</span>
+<span class="html">&lt;h1&gt;</span>Products<span class="html">&lt;/h1&gt;</span>
+
+<span class="erb">&lt;%=</span> <span class="method">link_to</span> <span class="string">"New Product"</span>, new_product_path <span class="erb">%&gt;</span>
+
+<span class="erb">&lt;%</span> <span class="variable">@products</span>.<span class="method">each</span> <span class="keyword">do</span> |product| <span class="erb">%&gt;</span>
+  <span class="html">&lt;div&gt;</span>
+    <span class="erb">&lt;%=</span> <span class="method">link_to</span> product.name, product <span class="erb">%&gt;</span>
+    <span class="erb">&lt;%=</span> <span class="method">number_to_currency</span>(product.price) <span class="erb">%&gt;</span>
+    <span class="erb">&lt;%=</span> <span class="method">link_to</span> <span class="string">"Edit"</span>, edit_product_path(product) <span class="erb">%&gt;</span>
+  <span class="html">&lt;/div&gt;</span>
+<span class="erb">&lt;%</span> <span class="keyword">end</span> <span class="erb">%&gt;</span>
+                    </div>
+                </div>
+
+                <div class="view-template-card">
+                    <div class="view-template-header">
+                        <span class="view-filename">show.html.erb</span>
+                    </div>
+                    <div class="view-template-code">
+<span class="comment">&lt;!-- app/views/products/show.html.erb --&gt;</span>
+<span class="html">&lt;h1&gt;</span><span class="erb">&lt;%=</span> <span class="variable">@product</span>.name <span class="erb">%&gt;</span><span class="html">&lt;/h1&gt;</span>
+
+<span class="html">&lt;p&gt;</span><span class="erb">&lt;%=</span> <span class="variable">@product</span>.description <span class="erb">%&gt;</span><span class="html">&lt;/p&gt;</span>
+<span class="html">&lt;p&gt;</span><span class="erb">&lt;%=</span> <span class="method">number_to_currency</span>(<span class="variable">@product</span>.price) <span class="erb">%&gt;</span><span class="html">&lt;/p&gt;</span>
+
+<span class="erb">&lt;%=</span> <span class="method">link_to</span> <span class="string">"Edit"</span>, edit_product_path(<span class="variable">@product</span>) <span class="erb">%&gt;</span>
+<span class="erb">&lt;%=</span> <span class="method">link_to</span> <span class="string">"Back"</span>, products_path <span class="erb">%&gt;</span>
+<span class="erb">&lt;%=</span> <span class="method">button_to</span> <span class="string">"Delete"</span>, <span class="variable">@product</span>, <span class="symbol">method:</span> <span class="symbol">:delete</span> <span class="erb">%&gt;</span>
+                    </div>
+                </div>
+
+                <div class="view-template-card">
+                    <div class="view-template-header">
+                        <span class="view-filename">new.html.erb</span>
+                    </div>
+                    <div class="view-template-code">
+<span class="comment">&lt;!-- app/views/products/new.html.erb --&gt;</span>
+<span class="html">&lt;h1&gt;</span>New Product<span class="html">&lt;/h1&gt;</span>
+
+<span class="erb">&lt;%=</span> <span class="method">render</span> <span class="string">"form"</span>, <span class="symbol">product:</span> <span class="variable">@product</span> <span class="erb">%&gt;</span>
+
+<span class="erb">&lt;%=</span> <span class="method">link_to</span> <span class="string">"Back"</span>, products_path <span class="erb">%&gt;</span>
+                    </div>
+                </div>
+
+                <div class="view-template-card">
+                    <div class="view-template-header">
+                        <span class="view-filename">edit.html.erb</span>
+                    </div>
+                    <div class="view-template-code">
+<span class="comment">&lt;!-- app/views/products/edit.html.erb --&gt;</span>
+<span class="html">&lt;h1&gt;</span>Edit Product<span class="html">&lt;/h1&gt;</span>
+
+<span class="erb">&lt;%=</span> <span class="method">render</span> <span class="string">"form"</span>, <span class="symbol">product:</span> <span class="variable">@product</span> <span class="erb">%&gt;</span>
+
+<span class="erb">&lt;%=</span> <span class="method">link_to</span> <span class="string">"Back"</span>, products_path <span class="erb">%&gt;</span>
+                    </div>
+                </div>
+
+                <div class="view-template-card full-width">
+                    <div class="view-template-header">
+                        <span class="view-filename">_form.html.erb</span>
+                        <span class="partial-badge">partial</span>
+                    </div>
+                    <div class="view-template-code">
+<span class="comment">&lt;!-- app/views/products/_form.html.erb (shared by new and edit) --&gt;</span>
+<span class="erb">&lt;%=</span> <span class="method">form_with</span> <span class="symbol">model:</span> product <span class="keyword">do</span> |f| <span class="erb">%&gt;</span>
+  <span class="erb">&lt;%</span> <span class="keyword">if</span> product.errors.<span class="method">any?</span> <span class="erb">%&gt;</span>
+    <span class="html">&lt;div</span> <span class="symbol">id=</span><span class="string">"errors"</span><span class="html">&gt;</span>
+      <span class="erb">&lt;%</span> product.errors.full_messages.<span class="method">each</span> <span class="keyword">do</span> |msg| <span class="erb">%&gt;</span>
+        <span class="html">&lt;p&gt;</span><span class="erb">&lt;%=</span> msg <span class="erb">%&gt;</span><span class="html">&lt;/p&gt;</span>
+      <span class="erb">&lt;%</span> <span class="keyword">end</span> <span class="erb">%&gt;</span>
+    <span class="html">&lt;/div&gt;</span>
+  <span class="erb">&lt;%</span> <span class="keyword">end</span> <span class="erb">%&gt;</span>
+
+  <span class="erb">&lt;%=</span> f.<span class="method">label</span> <span class="symbol">:name</span> <span class="erb">%&gt;</span>
+  <span class="erb">&lt;%=</span> f.<span class="method">text_field</span> <span class="symbol">:name</span> <span class="erb">%&gt;</span>
+
+  <span class="erb">&lt;%=</span> f.<span class="method">label</span> <span class="symbol">:price</span> <span class="erb">%&gt;</span>
+  <span class="erb">&lt;%=</span> f.<span class="method">number_field</span> <span class="symbol">:price</span>, <span class="symbol">step:</span> <span class="number">0.01</span> <span class="erb">%&gt;</span>
+
+  <span class="erb">&lt;%=</span> f.<span class="method">submit</span> <span class="erb">%&gt;</span>
+<span class="erb">&lt;%</span> <span class="keyword">end</span> <span class="erb">%&gt;</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>Ruby on Rails Cheat Sheet • Created with <span class="heart">❤️</span> for Michael Blake at Fastell Industrial Supplies</p>
+        </footer>
+    </div>
+</body>
+</html>
+

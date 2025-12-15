@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generate Commands - Ruby on Rails Cheat Sheet</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="main-nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-brand">
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="rubyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#CC342D"/>
+                            <stop offset="50%" style="stop-color:#D30001"/>
+                            <stop offset="100%" style="stop-color:#8B0000"/>
+                        </linearGradient>
+                    </defs>
+                    <polygon points="50,5 95,35 95,75 50,95 5,75 5,35" fill="url(#rubyGrad)" stroke="#8B0000" stroke-width="2"/>
+                </svg>
+                Rails Cheat Sheet
+            </a>
+            <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('active')">☰</button>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="generate-commands.html" class="active">Commands</a></li>
+                <li><a href="naming-conventions.html">Naming</a></li>
+                <li><a href="routes.html">Routes</a></li>
+                <li><a href="models.html">Models</a></li>
+                <li><a href="controllers-views.html">Controllers</a></li>
+                <li><a href="helpers.html">Helpers</a></li>
+                <li><a href="components.html">Components</a></li>
+                <li><a href="quick-reference.html">Reference</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <header class="page-header">
+        <div class="page-header-content">
+            <h1>Generate Commands</h1>
+            <p class="page-description">Rails CLI commands to scaffold your application</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <section class="section">
+            <div class="command-grid">
+                <div class="command-card">
+                    <h3>New Rails App</h3>
+                    <div class="command-box">
+                        <code>rails new myapp</code><br>
+                        <code>rails new myapp --database=postgresql</code><br>
+                        <code>rails new myapp --css=tailwind</code><br>
+                        <code>rails new myapp --api</code> <span class="comment"># API only</span>
+                    </div>
+                    <p>Creates a new Rails application with all necessary files and directories.</p>
+                </div>
+
+                <div class="command-card">
+                    <h3>Generate Model</h3>
+                    <div class="command-box">
+                        <code>rails generate model Product</code><br>
+                        <code>rails g model Product name:string price:decimal</code><br>
+                        <code>rails g model Order user:references total:decimal</code>
+                    </div>
+                    <p>Creates model file, migration, and test files. Use <code>references</code> for associations.</p>
+                </div>
+
+                <div class="command-card">
+                    <h3>Generate Controller</h3>
+                    <div class="command-box">
+                        <code>rails generate controller Products</code><br>
+                        <code>rails g controller Products index show</code><br>
+                        <code>rails g controller Admin::Products index</code>
+                    </div>
+                    <p>Creates controller, views for listed actions, helper, and test files.</p>
+                </div>
+
+                <div class="command-card">
+                    <h3>Generate Scaffold</h3>
+                    <div class="command-box">
+                        <code>rails g scaffold Product name:string price:decimal</code><br>
+                        <code>rails g scaffold Invoice number:string customer:references</code>
+                    </div>
+                    <p>Complete CRUD: model, migration, controller, views, routes, and tests.</p>
+                </div>
+
+                <div class="command-card">
+                    <h3>Generate Migration</h3>
+                    <div class="command-box">
+                        <code>rails g migration AddCategoryToProducts category:string</code><br>
+                        <code>rails g migration CreateJoinTableUsersRoles users roles</code><br>
+                        <code>rails g migration RemovePriceFromProducts price:decimal</code>
+                    </div>
+                    <p>Naming convention auto-generates migration code for add/remove/create.</p>
+                </div>
+
+                <div class="command-card">
+                    <h3>Database Commands</h3>
+                    <div class="command-box">
+                        <code>rails db:create</code> <span class="comment"># Create database</span><br>
+                        <code>rails db:migrate</code> <span class="comment"># Run migrations</span><br>
+                        <code>rails db:rollback</code> <span class="comment"># Undo last migration</span><br>
+                        <code>rails db:seed</code> <span class="comment"># Run db/seeds.rb</span><br>
+                        <code>rails db:reset</code> <span class="comment"># Drop, create, migrate, seed</span>
+                    </div>
+                    <p>Database management commands for setup and maintenance.</p>
+                </div>
+
+                <div class="command-card">
+                    <h3>Development Server</h3>
+                    <div class="command-box">
+                        <code>bin/dev</code> <span class="comment"># Start with Procfile.dev (recommended)</span><br>
+                        <code>rails server</code> <span class="comment"># Or: rails s</span><br>
+                        <code>rails s -p 4000</code> <span class="comment"># Custom port</span><br>
+                        <code>rails s -b 0.0.0.0</code> <span class="comment"># Bind to all interfaces</span>
+                    </div>
+                    <p><code>bin/dev</code> runs CSS/JS build processes alongside Rails server.</p>
+                </div>
+
+                <div class="command-card">
+                    <h3>Rails Console</h3>
+                    <div class="command-box">
+                        <code>rails console</code> <span class="comment"># Or: rails c</span><br>
+                        <code>rails c --sandbox</code> <span class="comment"># Rollback on exit</span><br>
+                        <code>rails c -e production</code> <span class="comment"># Production env</span><br>
+                        <code>rails dbconsole</code> <span class="comment"># Direct DB access</span>
+                    </div>
+                    <p>Interactive Ruby session with full Rails environment loaded.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>Ruby on Rails Cheat Sheet • Created with <span class="heart">❤️</span> for Michael Blake at Fastell Industrial Supplies</p>
+        </footer>
+    </div>
+</body>
+</html>
+

@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rails View Helpers - Ruby on Rails Cheat Sheet</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="main-nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-brand">
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="rubyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#CC342D"/>
+                            <stop offset="50%" style="stop-color:#D30001"/>
+                            <stop offset="100%" style="stop-color:#8B0000"/>
+                        </linearGradient>
+                    </defs>
+                    <polygon points="50,5 95,35 95,75 50,95 5,75 5,35" fill="url(#rubyGrad)" stroke="#8B0000" stroke-width="2"/>
+                </svg>
+                Rails Cheat Sheet
+            </a>
+            <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('active')">☰</button>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="generate-commands.html">Commands</a></li>
+                <li><a href="naming-conventions.html">Naming</a></li>
+                <li><a href="routes.html">Routes</a></li>
+                <li><a href="models.html">Models</a></li>
+                <li><a href="controllers-views.html">Controllers</a></li>
+                <li><a href="helpers.html" class="active">Helpers</a></li>
+                <li><a href="components.html">Components</a></li>
+                <li><a href="quick-reference.html">Reference</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <header class="page-header">
+        <div class="page-header-content">
+            <h1>Rails View Helpers</h1>
+            <p class="page-description">Built-in helpers for links, forms, numbers, dates, and content</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <section class="section">
+            <div class="helper-grid">
+                <div class="helper-card">
+                    <div class="helper-header">
+                        <div class="helper-icon" style="background: rgba(88, 166, 255, 0.2); color: var(--accent-blue);">🔗</div>
+                        <h3>link_to</h3>
+                    </div>
+                    <div class="helper-body">
+                        <div class="helper-example">
+<span style="color: var(--accent-green);">&lt;%= link_to "Products", products_path %&gt;</span>
+<span style="color: var(--accent-green);">&lt;%= link_to "View", product_path(@product) %&gt;</span>
+<span style="color: var(--accent-green);">&lt;%= link_to "Edit", edit_product_path(@product), class: "btn" %&gt;</span>
+<span style="color: var(--accent-green);">&lt;%= link_to "Delete", @product, method: :delete, data: { turbo_confirm: "Sure?" } %&gt;</span>
+                        </div>
+                        <p>Generates anchor tags with proper Rails paths. Supports HTTP methods and Turbo confirmations.</p>
+                    </div>
+                </div>
+
+                <div class="helper-card">
+                    <div class="helper-header">
+                        <div class="helper-icon" style="background: rgba(63, 185, 80, 0.2); color: var(--accent-green);">💰</div>
+                        <h3>number_to_currency</h3>
+                    </div>
+                    <div class="helper-body">
+                        <div class="helper-example">
+<span style="color: var(--accent-green);">&lt;%= number_to_currency(1234.56) %&gt;</span>
+<span style="color: var(--text-muted);"># → $1,234.56</span>
+
+<span style="color: var(--accent-green);">&lt;%= number_to_currency(1234.56, unit: "R", precision: 2) %&gt;</span>
+<span style="color: var(--text-muted);"># → R1,234.56</span>
+
+<span style="color: var(--accent-green);">&lt;%= number_to_currency(@product.price, locale: :za) %&gt;</span>
+                        </div>
+                        <p>Formats numbers as currency with configurable symbols, precision, and locale support.</p>
+                    </div>
+                </div>
+
+                <div class="helper-card">
+                    <div class="helper-header">
+                        <div class="helper-icon" style="background: rgba(163, 113, 247, 0.2); color: var(--accent-purple);">🖼️</div>
+                        <h3>image_tag</h3>
+                    </div>
+                    <div class="helper-body">
+                        <div class="helper-example">
+<span style="color: var(--accent-green);">&lt;%= image_tag "logo.png" %&gt;</span>
+<span style="color: var(--accent-green);">&lt;%= image_tag "products/item.jpg", alt: "Product", class: "thumbnail" %&gt;</span>
+<span style="color: var(--accent-green);">&lt;%= image_tag @product.image.variant(:thumb) %&gt;</span>
+<span style="color: var(--text-muted);"># For Active Storage</span>
+                        </div>
+                        <p>Generates img tags for images in app/assets/images or Active Storage attachments.</p>
+                    </div>
+                </div>
+
+                <div class="helper-card">
+                    <div class="helper-header">
+                        <div class="helper-icon" style="background: rgba(240, 136, 62, 0.2); color: var(--accent-orange);">📝</div>
+                        <h3>form_with</h3>
+                    </div>
+                    <div class="helper-body">
+                        <div class="helper-example">
+<span style="color: var(--accent-green);">&lt;%= form_with model: @product do |f| %&gt;</span>
+  <span style="color: var(--accent-green);">&lt;%= f.label :name %&gt;</span>
+  <span style="color: var(--accent-green);">&lt;%= f.text_field :name, class: "form-control" %&gt;</span>
+  
+  <span style="color: var(--accent-green);">&lt;%= f.label :price %&gt;</span>
+  <span style="color: var(--accent-green);">&lt;%= f.number_field :price, step: 0.01 %&gt;</span>
+  
+  <span style="color: var(--accent-green);">&lt;%= f.select :category_id, Category.all.pluck(:name, :id) %&gt;</span>
+  <span style="color: var(--accent-green);">&lt;%= f.check_box :active %&gt;</span>
+  <span style="color: var(--accent-green);">&lt;%= f.text_area :description, rows: 5 %&gt;</span>
+  
+  <span style="color: var(--accent-green);">&lt;%= f.submit "Save", class: "btn btn-primary" %&gt;</span>
+<span style="color: var(--accent-green);">&lt;% end %&gt;</span>
+                        </div>
+                        <p>Generates forms bound to model objects. Auto-detects create vs update based on record persistence.</p>
+                    </div>
+                </div>
+
+                <div class="helper-card">
+                    <div class="helper-header">
+                        <div class="helper-icon" style="background: rgba(210, 153, 34, 0.2); color: var(--accent-yellow);">📋</div>
+                        <h3>Collection Helpers</h3>
+                    </div>
+                    <div class="helper-body">
+                        <div class="helper-example">
+<span style="color: var(--accent-green);">&lt;%= render @products %&gt;</span>
+<span style="color: var(--text-muted);"># Renders _product.html.erb for each</span>
+
+<span style="color: var(--accent-green);">&lt;%= render partial: "product", collection: @products %&gt;</span>
+
+<span style="color: var(--accent-green);">&lt;%= collection_select :invoice, :customer_id, Customer.all, :id, :name %&gt;</span>
+
+<span style="color: var(--accent-green);">&lt;%= options_for_select([["Small", 1], ["Large", 2]], @product.size) %&gt;</span>
+                        </div>
+                        <p>Efficiently render collections and generate select options from model data.</p>
+                    </div>
+                </div>
+
+                <div class="helper-card">
+                    <div class="helper-header">
+                        <div class="helper-icon" style="background: rgba(204, 52, 45, 0.2); color: var(--ruby-red);">🔢</div>
+                        <h3>Number Helpers</h3>
+                    </div>
+                    <div class="helper-body">
+                        <div class="helper-example">
+<span style="color: var(--accent-green);">&lt;%= number_with_delimiter(1234567) %&gt;</span>
+<span style="color: var(--text-muted);"># → 1,234,567</span>
+
+<span style="color: var(--accent-green);">&lt;%= number_with_precision(3.14159, precision: 2) %&gt;</span>
+<span style="color: var(--text-muted);"># → 3.14</span>
+
+<span style="color: var(--accent-green);">&lt;%= number_to_percentage(75.5) %&gt;</span>
+<span style="color: var(--text-muted);"># → 75.500%</span>
+
+<span style="color: var(--accent-green);">&lt;%= number_to_human(1234567) %&gt;</span>
+<span style="color: var(--text-muted);"># → 1.23 Million</span>
+                        </div>
+                        <p>Format numbers with delimiters, precision, percentages, and human-readable formats.</p>
+                    </div>
+                </div>
+
+                <div class="helper-card">
+                    <div class="helper-header">
+                        <div class="helper-icon" style="background: rgba(88, 166, 255, 0.2); color: var(--accent-blue);">📅</div>
+                        <h3>Date/Time Helpers</h3>
+                    </div>
+                    <div class="helper-body">
+                        <div class="helper-example">
+<span style="color: var(--accent-green);">&lt;%= time_ago_in_words(@product.created_at) %&gt;</span>
+<span style="color: var(--text-muted);"># → "3 days ago"</span>
+
+<span style="color: var(--accent-green);">&lt;%= distance_of_time_in_words(Time.now, @invoice.due_date) %&gt;</span>
+
+<span style="color: var(--accent-green);">&lt;%= @order.created_at.strftime("%B %d, %Y") %&gt;</span>
+<span style="color: var(--text-muted);"># → "January 15, 2024"</span>
+
+<span style="color: var(--accent-green);">&lt;%= l(@product.updated_at, format: :short) %&gt;</span>
+                        </div>
+                        <p>Format dates and calculate time differences in human-readable formats.</p>
+                    </div>
+                </div>
+
+                <div class="helper-card">
+                    <div class="helper-header">
+                        <div class="helper-icon" style="background: rgba(163, 113, 247, 0.2); color: var(--accent-purple);">✨</div>
+                        <h3>Content Helpers</h3>
+                    </div>
+                    <div class="helper-body">
+                        <div class="helper-example">
+<span style="color: var(--accent-green);">&lt;%= truncate(@product.description, length: 100) %&gt;</span>
+
+<span style="color: var(--accent-green);">&lt;%= simple_format(@product.notes) %&gt;</span>
+<span style="color: var(--text-muted);"># Converts \n to &lt;br&gt; and wraps in &lt;p&gt;</span>
+
+<span style="color: var(--accent-green);">&lt;%= sanitize(@content, tags: %w(p br strong em)) %&gt;</span>
+
+<span style="color: var(--accent-green);">&lt;%= raw(@html_content) %&gt;</span>
+<span style="color: var(--text-muted);"># Outputs unescaped HTML (use carefully!)</span>
+                        </div>
+                        <p>Manipulate and safely render text and HTML content.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>Ruby on Rails Cheat Sheet • Created with <span class="heart">❤️</span> for Michael Blake at Fastell Industrial Supplies</p>
+        </footer>
+    </div>
+</body>
+</html>
+

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Naming Conventions - Ruby on Rails Cheat Sheet</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="main-nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-brand">
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="rubyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#CC342D"/>
+                            <stop offset="50%" style="stop-color:#D30001"/>
+                            <stop offset="100%" style="stop-color:#8B0000"/>
+                        </linearGradient>
+                    </defs>
+                    <polygon points="50,5 95,35 95,75 50,95 5,75 5,35" fill="url(#rubyGrad)" stroke="#8B0000" stroke-width="2"/>
+                </svg>
+                Rails Cheat Sheet
+            </a>
+            <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('active')">☰</button>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="generate-commands.html">Commands</a></li>
+                <li><a href="naming-conventions.html" class="active">Naming</a></li>
+                <li><a href="routes.html">Routes</a></li>
+                <li><a href="models.html">Models</a></li>
+                <li><a href="controllers-views.html">Controllers</a></li>
+                <li><a href="helpers.html">Helpers</a></li>
+                <li><a href="components.html">Components</a></li>
+                <li><a href="quick-reference.html">Reference</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <header class="page-header">
+        <div class="page-header-content">
+            <h1>Naming Conventions</h1>
+            <p class="page-description">Rails conventions for models, controllers, tables, and files</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <section class="section">
+            <div class="naming-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Component</th>
+                            <th>Convention</th>
+                            <th>Example</th>
+                            <th>File Location</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="type">Model (class)</td>
+                            <td class="convention">CamelCase, Singular</td>
+                            <td class="example">Product, LineItem, UserProfile</td>
+                            <td>app/models/product.rb</td>
+                        </tr>
+                        <tr>
+                            <td class="type">Model (file)</td>
+                            <td class="convention">snake_case, singular</td>
+                            <td class="example">product.rb, line_item.rb</td>
+                            <td>app/models/</td>
+                        </tr>
+                        <tr>
+                            <td class="type">Database Table</td>
+                            <td class="convention">snake_case, plural</td>
+                            <td class="example">products, line_items, user_profiles</td>
+                            <td>Database</td>
+                        </tr>
+                        <tr>
+                            <td class="type">Controller (class)</td>
+                            <td class="convention">CamelCase, Plural + Controller</td>
+                            <td class="example">ProductsController, LineItemsController</td>
+                            <td>app/controllers/products_controller.rb</td>
+                        </tr>
+                        <tr>
+                            <td class="type">Controller (file)</td>
+                            <td class="convention">snake_case, plural</td>
+                            <td class="example">products_controller.rb</td>
+                            <td>app/controllers/</td>
+                        </tr>
+                        <tr>
+                            <td class="type">View Directory</td>
+                            <td class="convention">snake_case, plural</td>
+                            <td class="example">products/, line_items/</td>
+                            <td>app/views/products/</td>
+                        </tr>
+                        <tr>
+                            <td class="type">View Files</td>
+                            <td class="convention">action_name.html.erb</td>
+                            <td class="example">index.html.erb, show.html.erb</td>
+                            <td>app/views/products/index.html.erb</td>
+                        </tr>
+                        <tr>
+                            <td class="type">Helper</td>
+                            <td class="convention">CamelCase + Helper</td>
+                            <td class="example">ProductsHelper</td>
+                            <td>app/helpers/products_helper.rb</td>
+                        </tr>
+                        <tr>
+                            <td class="type">Migration</td>
+                            <td class="convention">CamelCase (descriptive)</td>
+                            <td class="example">CreateProducts, AddPriceToProducts</td>
+                            <td>db/migrate/20240115_create_products.rb</td>
+                        </tr>
+                        <tr>
+                            <td class="type">Foreign Key</td>
+                            <td class="convention">singular_model_id</td>
+                            <td class="example">user_id, product_id, line_item_id</td>
+                            <td>Database column</td>
+                        </tr>
+                        <tr>
+                            <td class="type">Primary Key</td>
+                            <td class="convention">id (automatic)</td>
+                            <td class="example">id</td>
+                            <td>Database column</td>
+                        </tr>
+                        <tr>
+                            <td class="type">Join Table</td>
+                            <td class="convention">alphabetical_model1_model2</td>
+                            <td class="example">products_users, categories_products</td>
+                            <td>Database</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>Ruby on Rails Cheat Sheet • Created with <span class="heart">❤️</span> for Michael Blake at Fastell Industrial Supplies</p>
+        </footer>
+    </div>
+</body>
+</html>
+

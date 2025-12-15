@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Routes & Routing - Ruby on Rails Cheat Sheet</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="main-nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-brand">
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="rubyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#CC342D"/>
+                            <stop offset="50%" style="stop-color:#D30001"/>
+                            <stop offset="100%" style="stop-color:#8B0000"/>
+                        </linearGradient>
+                    </defs>
+                    <polygon points="50,5 95,35 95,75 50,95 5,75 5,35" fill="url(#rubyGrad)" stroke="#8B0000" stroke-width="2"/>
+                </svg>
+                Rails Cheat Sheet
+            </a>
+            <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('active')">☰</button>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="generate-commands.html">Commands</a></li>
+                <li><a href="naming-conventions.html">Naming</a></li>
+                <li><a href="routes.html" class="active">Routes</a></li>
+                <li><a href="models.html">Models</a></li>
+                <li><a href="controllers-views.html">Controllers</a></li>
+                <li><a href="helpers.html">Helpers</a></li>
+                <li><a href="components.html">Components</a></li>
+                <li><a href="quick-reference.html">Reference</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <header class="page-header">
+        <div class="page-header-content">
+            <h1>Routes & Routing</h1>
+            <p class="page-description">Map URLs to controllers and actions in config/routes.rb</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <section class="section">
+            <div class="routes-visual">
+                <div class="route-diagram">
+                    <div class="route-node browser">🌐 Browser Request<br><small>GET /products/1</small></div>
+                    <span class="route-arrow">→</span>
+                    <div class="route-node routes">📋 config/routes.rb<br><small>matches route</small></div>
+                    <span class="route-arrow">→</span>
+                    <div class="route-node controller">⚙️ ProductsController#show<br><small>action called</small></div>
+                </div>
+
+                <div class="routes-code">
+<span class="comment"># config/routes.rb</span>
+Rails.application.routes.<span class="method">draw</span> <span class="keyword">do</span>
+  <span class="comment"># Root route - homepage</span>
+  <span class="method">root</span> <span class="string">"products#index"</span>
+  <span class="comment"># Alternative syntax:</span>
+  <span class="method">root</span> <span class="symbol">to:</span> <span class="string">"inventory#index"</span>
+
+  <span class="comment"># RESTful resource routes (creates all 7 CRUD routes)</span>
+  <span class="method">resources</span> <span class="symbol">:products</span>
+  <span class="method">resources</span> <span class="symbol">:invoices</span>
+  <span class="method">resources</span> <span class="symbol">:customers</span>
+
+  <span class="comment"># Limit routes generated</span>
+  <span class="method">resources</span> <span class="symbol">:articles</span>, <span class="symbol">only:</span> [<span class="symbol">:index</span>, <span class="symbol">:show</span>]
+  <span class="method">resources</span> <span class="symbol">:comments</span>, <span class="symbol">except:</span> [<span class="symbol">:destroy</span>]
+
+  <span class="comment"># Nested resources</span>
+  <span class="method">resources</span> <span class="symbol">:invoices</span> <span class="keyword">do</span>
+    <span class="method">resources</span> <span class="symbol">:line_items</span>
+  <span class="keyword">end</span>
+  <span class="comment"># Creates: /invoices/:invoice_id/line_items</span>
+
+  <span class="comment"># Custom routes</span>
+  <span class="method">get</span> <span class="string">"about"</span>, <span class="symbol">to:</span> <span class="string">"pages#about"</span>
+  <span class="method">get</span> <span class="string">"dashboard"</span>, <span class="symbol">to:</span> <span class="string">"admin#dashboard"</span>, <span class="symbol">as:</span> <span class="symbol">:admin_dashboard</span>
+  <span class="method">post</span> <span class="string">"search"</span>, <span class="symbol">to:</span> <span class="string">"products#search"</span>
+
+  <span class="comment"># Member and collection routes</span>
+  <span class="method">resources</span> <span class="symbol">:products</span> <span class="keyword">do</span>
+    <span class="method">member</span> <span class="keyword">do</span>
+      <span class="method">patch</span> <span class="symbol">:archive</span>  <span class="comment"># /products/:id/archive</span>
+    <span class="keyword">end</span>
+    <span class="method">collection</span> <span class="keyword">do</span>
+      <span class="method">get</span> <span class="symbol">:export</span>    <span class="comment"># /products/export</span>
+    <span class="keyword">end</span>
+  <span class="keyword">end</span>
+
+  <span class="comment"># Namespace for admin area</span>
+  <span class="method">namespace</span> <span class="symbol">:admin</span> <span class="keyword">do</span>
+    <span class="method">resources</span> <span class="symbol">:users</span>
+  <span class="keyword">end</span>
+  <span class="comment"># Creates: /admin/users → Admin::UsersController</span>
+<span class="keyword">end</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>Ruby on Rails Cheat Sheet • Created with <span class="heart">❤️</span> for Michael Blake at Fastell Industrial Supplies</p>
+        </footer>
+    </div>
+</body>
+</html>
+

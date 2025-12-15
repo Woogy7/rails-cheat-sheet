@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quick Reference - Ruby on Rails Cheat Sheet</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="main-nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-brand">
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="rubyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#CC342D"/>
+                            <stop offset="50%" style="stop-color:#D30001"/>
+                            <stop offset="100%" style="stop-color:#8B0000"/>
+                        </linearGradient>
+                    </defs>
+                    <polygon points="50,5 95,35 95,75 50,95 5,75 5,35" fill="url(#rubyGrad)" stroke="#8B0000" stroke-width="2"/>
+                </svg>
+                Rails Cheat Sheet
+            </a>
+            <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('active')">☰</button>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="generate-commands.html">Commands</a></li>
+                <li><a href="naming-conventions.html">Naming</a></li>
+                <li><a href="routes.html">Routes</a></li>
+                <li><a href="models.html">Models</a></li>
+                <li><a href="controllers-views.html">Controllers</a></li>
+                <li><a href="helpers.html">Helpers</a></li>
+                <li><a href="components.html">Components</a></li>
+                <li><a href="quick-reference.html" class="active">Reference</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <header class="page-header">
+        <div class="page-header-content">
+            <h1>Quick Reference</h1>
+            <p class="page-description">Essential Rails commands at a glance</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <section class="section">
+            <div class="quick-ref" style="margin-top: 0;">
+                <h2>⚡ Common Commands</h2>
+                <div class="quick-ref-grid">
+                    <div class="quick-item">
+                        <span class="label">Start server</span>
+                        <span class="command">bin/dev</span>
+                    </div>
+                    <div class="quick-item">
+                        <span class="label">Console</span>
+                        <span class="command">rails c</span>
+                    </div>
+                    <div class="quick-item">
+                        <span class="label">Routes list</span>
+                        <span class="command">rails routes</span>
+                    </div>
+                    <div class="quick-item">
+                        <span class="label">Run migrations</span>
+                        <span class="command">rails db:migrate</span>
+                    </div>
+                    <div class="quick-item">
+                        <span class="label">Rollback</span>
+                        <span class="command">rails db:rollback</span>
+                    </div>
+                    <div class="quick-item">
+                        <span class="label">Reset database</span>
+                        <span class="command">rails db:reset</span>
+                    </div>
+                    <div class="quick-item">
+                        <span class="label">Generate model</span>
+                        <span class="command">rails g model Name</span>
+                    </div>
+                    <div class="quick-item">
+                        <span class="label">Generate controller</span>
+                        <span class="command">rails g controller Names</span>
+                    </div>
+                    <div class="quick-item">
+                        <span class="label">Generate scaffold</span>
+                        <span class="command">rails g scaffold Name</span>
+                    </div>
+                    <div class="quick-item">
+                        <span class="label">Run tests</span>
+                        <span class="command">rails test</span>
+                    </div>
+                    <div class="quick-item">
+                        <span class="label">Check routes</span>
+                        <span class="command">rails routes -g product</span>
+                    </div>
+                    <div class="quick-item">
+                        <span class="label">DB console</span>
+                        <span class="command">rails dbconsole</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="quick-ref">
+                <h2>🗄️ Database Commands</h2>
+                <div class="quick-ref-grid">
+                    <div class="quick-item">
+                        <span class="label">Create database</span>
+                        <span class="command">rails db:create</span>
+                    </div>
+                    <div class="quick-item">
+                        <span class="label">Drop database</span>
+                        <span class="command">rails db:drop</span>
+                    </div>
+                    <div class="quick-item">
+                        <span class="label">Run seeds</span>
+                        <span class="command">rails db:seed</span>
+                    </div>
+                    <div class="quick-item">
+                        <span class="label">Migration status</span>
+                        <span class="command">rails db:migrate:status</span>
+                    </div>
+                    <div class="quick-item">
+                        <span class="label">Redo migration</span>
+                        <span class="command">rails db:migrate:redo</span>
+                    </div>
+                    <div class="quick-item">
+                        <span class="label">Setup (create+migrate+seed)</span>
+                        <span class="command">rails db:setup</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="quick-ref">
+                <h2>⚙️ Generators</h2>
+                <div class="quick-ref-grid">
+                    <div class="quick-item">
+                        <span class="label">Migration</span>
+                        <span class="command">rails g migration AddFieldToTable</span>
+                    </div>
+                    <div class="quick-item">
+                        <span class="label">Mailer</span>
+                        <span class="command">rails g mailer Name</span>
+                    </div>
+                    <div class="quick-item">
+                        <span class="label">Job</span>
+                        <span class="command">rails g job Name</span>
+                    </div>
+                    <div class="quick-item">
+                        <span class="label">Channel</span>
+                        <span class="command">rails g channel Name</span>
+                    </div>
+                    <div class="quick-item">
+                        <span class="label">Helper</span>
+                        <span class="command">rails g helper Name</span>
+                    </div>
+                    <div class="quick-item">
+                        <span class="label">Authentication (Rails 8)</span>
+                        <span class="command">rails g authentication</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="quick-ref">
+                <h2>🧪 Testing</h2>
+                <div class="quick-ref-grid">
+                    <div class="quick-item">
+                        <span class="label">All tests</span>
+                        <span class="command">rails test</span>
+                    </div>
+                    <div class="quick-item">
+                        <span class="label">Model tests</span>
+                        <span class="command">rails test:models</span>
+                    </div>
+                    <div class="quick-item">
+                        <span class="label">Controller tests</span>
+                        <span class="command">rails test:controllers</span>
+                    </div>
+                    <div class="quick-item">
+                        <span class="label">System tests</span>
+                        <span class="command">rails test:system</span>
+                    </div>
+                    <div class="quick-item">
+                        <span class="label">Single file</span>
+                        <span class="command">rails test test/models/product_test.rb</span>
+                    </div>
+                    <div class="quick-item">
+                        <span class="label">Single test</span>
+                        <span class="command">rails test test/models/product_test.rb:10</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="quick-ref">
+                <h2>📦 Assets & Bundler</h2>
+                <div class="quick-ref-grid">
+                    <div class="quick-item">
+                        <span class="label">Install gems</span>
+                        <span class="command">bundle install</span>
+                    </div>
+                    <div class="quick-item">
+                        <span class="label">Update gems</span>
+                        <span class="command">bundle update</span>
+                    </div>
+                    <div class="quick-item">
+                        <span class="label">Precompile assets</span>
+                        <span class="command">rails assets:precompile</span>
+                    </div>
+                    <div class="quick-item">
+                        <span class="label">Clean assets</span>
+                        <span class="command">rails assets:clobber</span>
+                    </div>
+                    <div class="quick-item">
+                        <span class="label">List outdated gems</span>
+                        <span class="command">bundle outdated</span>
+                    </div>
+                    <div class="quick-item">
+                        <span class="label">Run binstub</span>
+                        <span class="command">bin/rails</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>Ruby on Rails Cheat Sheet • Created with <span class="heart">❤️</span> for Michael Blake at Fastell Industrial Supplies</p>
+        </footer>
+    </div>
+</body>
+</html>
+
