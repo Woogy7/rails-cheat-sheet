@@ -438,6 +438,120 @@ body {
     font-style: italic;
 }
 
+.routes-code .variable {
+    color: var(--accent-pink);
+}
+
+.routes-code .html {
+    color: var(--text-secondary);
+}
+
+.routes-code .erb {
+    color: var(--ruby-red);
+}
+
+.routes-code .number {
+    color: var(--accent-yellow);
+}
+
+/* View Templates Grid */
+.view-templates-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.view-template-card {
+    background: var(--bg-card);
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+    transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.view-template-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--accent-blue);
+}
+
+.view-template-card.full-width {
+    grid-column: 1 / -1;
+}
+
+.view-template-header {
+    background: var(--bg-code);
+    padding: 12px 18px;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.view-filename {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.9rem;
+    color: var(--accent-blue);
+    font-weight: 600;
+}
+
+.partial-badge {
+    background: rgba(163, 113, 247, 0.2);
+    color: var(--accent-purple);
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.view-template-code {
+    padding: 18px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    line-height: 1.7;
+    overflow-x: auto;
+    white-space: pre-wrap;
+}
+
+.view-template-code .comment {
+    color: var(--text-muted);
+    font-style: italic;
+}
+
+.view-template-code .html {
+    color: var(--text-secondary);
+}
+
+.view-template-code .erb {
+    color: var(--ruby-red);
+    font-weight: 600;
+}
+
+.view-template-code .method {
+    color: var(--accent-blue);
+}
+
+.view-template-code .string {
+    color: var(--accent-green);
+}
+
+.view-template-code .symbol {
+    color: var(--accent-orange);
+}
+
+.view-template-code .variable {
+    color: var(--accent-pink);
+}
+
+.view-template-code .keyword {
+    color: var(--accent-purple);
+}
+
+.view-template-code .number {
+    color: var(--accent-yellow);
+}
+
 /* RESTful Actions */
 .restful-grid {
     display: grid;
