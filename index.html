@@ -1,0 +1,1659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ruby on Rails Cheat Sheet</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --ruby-red: #CC342D;
+            --ruby-dark: #8B0000;
+            --rails-red: #D30001;
+            --bg-dark: #0D1117;
+            --bg-card: #161B22;
+            --bg-code: #1C2128;
+            --text-primary: #F0F6FC;
+            --text-secondary: #8B949E;
+            --text-muted: #6E7681;
+            --accent-green: #3FB950;
+            --accent-blue: #58A6FF;
+            --accent-purple: #A371F7;
+            --accent-orange: #F0883E;
+            --accent-yellow: #D29922;
+            --accent-pink: #DB61A2;
+            --border-color: #30363D;
+            --gradient-ruby: linear-gradient(135deg, #CC342D 0%, #8B0000 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--bg-dark) 0%, #1a1a2e 50%, var(--bg-dark) 100%);
+            padding: 60px 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(204, 52, 45, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 50%, rgba(204, 52, 45, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .ruby-gem {
+            width: 80px;
+            height: 80px;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 900;
+            background: var(--gradient-ruby);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -2px;
+            margin-bottom: 10px;
+        }
+
+        .hero .tagline {
+            font-size: 1.3rem;
+            color: var(--text-secondary);
+            font-weight: 300;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .version-badge {
+            display: inline-block;
+            background: var(--gradient-ruby);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-top: 20px;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* Section Headers */
+        .section {
+            margin-bottom: 60px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .section-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .section-header h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: -1px;
+        }
+
+        /* MVC Architecture Diagram */
+        .mvc-diagram {
+            background: var(--bg-card);
+            border-radius: 20px;
+            padding: 40px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 30px;
+        }
+
+        .mvc-visual {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 40px;
+        }
+
+        .mvc-box {
+            width: 200px;
+            padding: 30px 20px;
+            border-radius: 16px;
+            text-align: center;
+            position: relative;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .mvc-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        .mvc-box.model {
+            background: linear-gradient(135deg, #3FB950 0%, #238636 100%);
+        }
+
+        .mvc-box.view {
+            background: linear-gradient(135deg, #58A6FF 0%, #1F6FEB 100%);
+        }
+
+        .mvc-box.controller {
+            background: linear-gradient(135deg, #A371F7 0%, #8957E5 100%);
+        }
+
+        .mvc-box h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: white;
+        }
+
+        .mvc-box p {
+            font-size: 0.85rem;
+            color: rgba(255,255,255,0.9);
+            line-height: 1.4;
+        }
+
+        .mvc-arrow {
+            font-size: 2rem;
+            color: var(--text-muted);
+        }
+
+        .mvc-flow {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .flow-step {
+            background: var(--bg-code);
+            border-radius: 12px;
+            padding: 20px;
+            border-left: 4px solid var(--ruby-red);
+        }
+
+        .flow-step-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 30px;
+            height: 30px;
+            background: var(--ruby-red);
+            border-radius: 50%;
+            font-weight: 700;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+
+        .flow-step h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+
+        .flow-step p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        /* Command Cards */
+        .command-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+        }
+
+        .command-card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 25px;
+            border: 1px solid var(--border-color);
+            transition: border-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .command-card:hover {
+            border-color: var(--ruby-red);
+            transform: translateY(-3px);
+        }
+
+        .command-card h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .command-card h3::before {
+            content: '❯';
+            color: var(--ruby-red);
+            font-weight: 700;
+        }
+
+        .command-box {
+            background: var(--bg-code);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            border: 1px solid var(--border-color);
+            overflow-x: auto;
+        }
+
+        .command-box code {
+            color: var(--accent-green);
+        }
+
+        .command-box .comment {
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        .command-card p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        /* Naming Conventions */
+        .naming-table {
+            width: 100%;
+            background: var(--bg-card);
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        .naming-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .naming-table th {
+            background: var(--bg-code);
+            padding: 18px 20px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--text-primary);
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .naming-table td {
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.9rem;
+        }
+
+        .naming-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .naming-table tr:hover td {
+            background: rgba(204, 52, 45, 0.05);
+        }
+
+        .naming-table .type {
+            color: var(--accent-purple);
+            font-weight: 500;
+        }
+
+        .naming-table .convention {
+            color: var(--accent-blue);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+        }
+
+        .naming-table .example {
+            color: var(--accent-green);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+        }
+
+        /* Routes Section */
+        .routes-visual {
+            background: var(--bg-card);
+            border-radius: 20px;
+            padding: 30px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 25px;
+        }
+
+        .route-diagram {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: var(--bg-code);
+            border-radius: 12px;
+        }
+
+        .route-node {
+            padding: 15px 25px;
+            border-radius: 10px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .route-node.browser {
+            background: linear-gradient(135deg, #F0883E 0%, #D29922 100%);
+            color: white;
+        }
+
+        .route-node.routes {
+            background: linear-gradient(135deg, #CC342D 0%, #8B0000 100%);
+            color: white;
+        }
+
+        .route-node.controller {
+            background: linear-gradient(135deg, #A371F7 0%, #8957E5 100%);
+            color: white;
+        }
+
+        .route-arrow {
+            color: var(--text-muted);
+            font-size: 1.5rem;
+        }
+
+        .routes-code {
+            background: var(--bg-code);
+            border-radius: 12px;
+            padding: 25px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            line-height: 1.8;
+            border: 1px solid var(--border-color);
+            overflow-x: auto;
+        }
+
+        .routes-code .keyword {
+            color: var(--accent-purple);
+        }
+
+        .routes-code .string {
+            color: var(--accent-green);
+        }
+
+        .routes-code .symbol {
+            color: var(--accent-orange);
+        }
+
+        .routes-code .method {
+            color: var(--accent-blue);
+        }
+
+        .routes-code .comment {
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        /* RESTful Actions */
+        .restful-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+        }
+
+        .action-card {
+            background: var(--bg-card);
+            border-radius: 14px;
+            padding: 20px;
+            border: 1px solid var(--border-color);
+            display: flex;
+            gap: 15px;
+            align-items: flex-start;
+            transition: transform 0.3s ease;
+        }
+
+        .action-card:hover {
+            transform: translateX(5px);
+        }
+
+        .action-badge {
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .action-badge.get {
+            background: rgba(63, 185, 80, 0.15);
+            color: var(--accent-green);
+            border: 1px solid rgba(63, 185, 80, 0.3);
+        }
+
+        .action-badge.post {
+            background: rgba(88, 166, 255, 0.15);
+            color: var(--accent-blue);
+            border: 1px solid rgba(88, 166, 255, 0.3);
+        }
+
+        .action-badge.patch {
+            background: rgba(240, 136, 62, 0.15);
+            color: var(--accent-orange);
+            border: 1px solid rgba(240, 136, 62, 0.3);
+        }
+
+        .action-badge.delete {
+            background: rgba(204, 52, 45, 0.15);
+            color: var(--ruby-red);
+            border: 1px solid rgba(204, 52, 45, 0.3);
+        }
+
+        .action-info h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 5px;
+        }
+
+        .action-info .path {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        .action-info p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+
+        /* Helpers Section */
+        .helper-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 20px;
+        }
+
+        .helper-card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        .helper-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .helper-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .helper-header h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .helper-body {
+            padding: 20px;
+        }
+
+        .helper-example {
+            background: var(--bg-code);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            line-height: 1.6;
+            overflow-x: auto;
+            border: 1px solid var(--border-color);
+        }
+
+        .helper-body p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        /* Components Section */
+        .component-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 20px;
+        }
+
+        .component-card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 25px;
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .component-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+
+        .component-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+        }
+
+        .component-card.hotwire::before { background: var(--gradient-ruby); }
+        .component-card.turbo::before { background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple)); }
+        .component-card.activerecord::before { background: linear-gradient(90deg, var(--accent-green), #238636); }
+        .component-card.actioncable::before { background: linear-gradient(90deg, var(--accent-orange), var(--accent-yellow)); }
+        .component-card.activestorage::before { background: linear-gradient(90deg, var(--accent-purple), var(--accent-pink)); }
+        .component-card.authentication::before { background: linear-gradient(90deg, #3FB950, var(--accent-blue)); }
+        .component-card.actionmailer::before { background: linear-gradient(90deg, var(--accent-pink), var(--ruby-red)); }
+        .component-card.activejob::before { background: linear-gradient(90deg, var(--accent-yellow), var(--accent-orange)); }
+        .component-card.sessions::before { background: linear-gradient(90deg, var(--accent-blue), var(--accent-green)); }
+
+        .component-card h3 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .component-card .description {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .component-card .usage {
+            background: var(--bg-code);
+            border-radius: 10px;
+            padding: 15px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            line-height: 1.5;
+            border: 1px solid var(--border-color);
+            overflow-x: auto;
+        }
+
+        /* Quick Reference */
+        .quick-ref {
+            background: linear-gradient(135deg, var(--bg-card) 0%, #1a1a2e 100%);
+            border-radius: 20px;
+            padding: 30px;
+            border: 1px solid var(--border-color);
+            margin-top: 40px;
+        }
+
+        .quick-ref h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .quick-ref-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .quick-item {
+            background: var(--bg-code);
+            border-radius: 10px;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid var(--border-color);
+        }
+
+        .quick-item .label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .quick-item .command {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--accent-green);
+            background: var(--bg-dark);
+            padding: 5px 12px;
+            border-radius: 6px;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 40px 20px;
+            border-top: 1px solid var(--border-color);
+            margin-top: 60px;
+        }
+
+        .footer p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .footer .heart {
+            color: var(--ruby-red);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .mvc-visual {
+                flex-direction: column;
+            }
+            
+            .mvc-arrow {
+                transform: rotate(90deg);
+            }
+            
+            .command-grid,
+            .helper-grid,
+            .component-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .route-diagram {
+                flex-direction: column;
+            }
+            
+            .route-arrow {
+                transform: rotate(90deg);
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .section {
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        /* Code highlighting improvements */
+        .code-block {
+            position: relative;
+        }
+
+        .code-block::before {
+            content: attr(data-lang);
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Tooltips */
+        .tooltip {
+            position: relative;
+            cursor: help;
+        }
+
+        .tooltip::after {
+            content: attr(data-tip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            border: 1px solid var(--border-color);
+        }
+
+        .tooltip:hover::after {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <header class="hero">
+        <div class="hero-content">
+            <div class="logo-container">
+                <svg class="ruby-gem" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="rubyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#CC342D"/>
+                            <stop offset="50%" style="stop-color:#D30001"/>
+                            <stop offset="100%" style="stop-color:#8B0000"/>
+                        </linearGradient>
+                        <linearGradient id="rubyShine" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#FF6B6B;stop-opacity:0.8"/>
+                            <stop offset="100%" style="stop-color:#CC342D;stop-opacity:0"/>
+                        </linearGradient>
+                    </defs>
+                    <polygon points="50,5 95,35 95,75 50,95 5,75 5,35" fill="url(#rubyGrad)" stroke="#8B0000" stroke-width="2"/>
+                    <polygon points="50,5 50,95 5,75 5,35" fill="url(#rubyShine)"/>
+                    <polygon points="50,5 95,35 50,50 5,35" fill="rgba(255,255,255,0.1)"/>
+                    <line x1="50" y1="5" x2="50" y2="95" stroke="#8B0000" stroke-width="1" opacity="0.5"/>
+                    <line x1="5" y1="35" x2="95" y2="75" stroke="#8B0000" stroke-width="1" opacity="0.3"/>
+                    <line x1="95" y1="35" x2="5" y2="75" stroke="#8B0000" stroke-width="1" opacity="0.3"/>
+                </svg>
+            </div>
+            <h1>Ruby on Rails</h1>
+            <p class="tagline">Complete Cheat Sheet & Reference Guide</p>
+            <span class="version-badge">Rails 7+ Compatible</span>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- MVC Architecture Section -->
+        <section class="section">
+            <div class="section-header">
+                <div class="section-icon" style="background: var(--gradient-ruby);">
+                    <span>🏗️</span>
+                </div>
+                <h2>MVC Architecture</h2>
+            </div>
+            
+            <div class="mvc-diagram">
+                <div class="mvc-visual">
+                    <div class="mvc-box model">
+                        <h3>Model</h3>
+                        <p>Business logic & data. Interacts with database via Active Record.</p>
+                    </div>
+                    <span class="mvc-arrow">⟷</span>
+                    <div class="mvc-box controller">
+                        <h3>Controller</h3>
+                        <p>Handles requests, processes data, returns responses.</p>
+                    </div>
+                    <span class="mvc-arrow">⟷</span>
+                    <div class="mvc-box view">
+                        <h3>View</h3>
+                        <p>User interface. ERB templates render HTML.</p>
+                    </div>
+                </div>
+
+                <div class="mvc-flow">
+                    <div class="flow-step">
+                        <span class="flow-step-number">1</span>
+                        <h4>Browser sends request</h4>
+                        <p>User clicks link or submits form → HTTP request sent to server</p>
+                    </div>
+                    <div class="flow-step">
+                        <span class="flow-step-number">2</span>
+                        <h4>Router matches URL</h4>
+                        <p>config/routes.rb maps URL to controller#action</p>
+                    </div>
+                    <div class="flow-step">
+                        <span class="flow-step-number">3</span>
+                        <h4>Controller processes</h4>
+                        <p>Action method executes, interacts with Model</p>
+                    </div>
+                    <div class="flow-step">
+                        <span class="flow-step-number">4</span>
+                        <h4>Model queries database</h4>
+                        <p>Active Record fetches/saves data from/to database</p>
+                    </div>
+                    <div class="flow-step">
+                        <span class="flow-step-number">5</span>
+                        <h4>View renders response</h4>
+                        <p>ERB template generates HTML with data</p>
+                    </div>
+                    <div class="flow-step">
+                        <span class="flow-step-number">6</span>
+                        <h4>Browser displays</h4>
+                        <p>HTML returned to browser, page rendered</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Generate Commands Section -->
+        <section class="section">
+            <div class="section-header">
+                <div class="section-icon" style="background: linear-gradient(135deg, var(--accent-green) 0%, #238636 100%);">
+                    <span>⚡</span>
+                </div>
+                <h2>Generate Commands</h2>
+            </div>
+
+            <div class="command-grid">
+                <div class="command-card">
+                    <h3>New Rails App</h3>
+                    <div class="command-box">
+                        <code>rails new myapp</code><br>
+                        <code>rails new myapp --database=postgresql</code><br>
+                        <code>rails new myapp --css=tailwind</code><br>
+                        <code>rails new myapp --api</code> <span class="comment"># API only</span>
+                    </div>
+                    <p>Creates a new Rails application with all necessary files and directories.</p>
+                </div>
+
+                <div class="command-card">
+                    <h3>Generate Model</h3>
+                    <div class="command-box">
+                        <code>rails generate model Product</code><br>
+                        <code>rails g model Product name:string price:decimal</code><br>
+                        <code>rails g model Order user:references total:decimal</code>
+                    </div>
+                    <p>Creates model file, migration, and test files. Use <code>references</code> for associations.</p>
+                </div>
+
+                <div class="command-card">
+                    <h3>Generate Controller</h3>
+                    <div class="command-box">
+                        <code>rails generate controller Products</code><br>
+                        <code>rails g controller Products index show</code><br>
+                        <code>rails g controller Admin::Products index</code>
+                    </div>
+                    <p>Creates controller, views for listed actions, helper, and test files.</p>
+                </div>
+
+                <div class="command-card">
+                    <h3>Generate Scaffold</h3>
+                    <div class="command-box">
+                        <code>rails g scaffold Product name:string price:decimal</code><br>
+                        <code>rails g scaffold Invoice number:string customer:references</code>
+                    </div>
+                    <p>Complete CRUD: model, migration, controller, views, routes, and tests.</p>
+                </div>
+
+                <div class="command-card">
+                    <h3>Generate Migration</h3>
+                    <div class="command-box">
+                        <code>rails g migration AddCategoryToProducts category:string</code><br>
+                        <code>rails g migration CreateJoinTableUsersRoles users roles</code><br>
+                        <code>rails g migration RemovePriceFromProducts price:decimal</code>
+                    </div>
+                    <p>Naming convention auto-generates migration code for add/remove/create.</p>
+                </div>
+
+                <div class="command-card">
+                    <h3>Database Commands</h3>
+                    <div class="command-box">
+                        <code>rails db:create</code> <span class="comment"># Create database</span><br>
+                        <code>rails db:migrate</code> <span class="comment"># Run migrations</span><br>
+                        <code>rails db:rollback</code> <span class="comment"># Undo last migration</span><br>
+                        <code>rails db:seed</code> <span class="comment"># Run db/seeds.rb</span><br>
+                        <code>rails db:reset</code> <span class="comment"># Drop, create, migrate, seed</span>
+                    </div>
+                    <p>Database management commands for setup and maintenance.</p>
+                </div>
+
+                <div class="command-card">
+                    <h3>Development Server</h3>
+                    <div class="command-box">
+                        <code>bin/dev</code> <span class="comment"># Start with Procfile.dev (recommended)</span><br>
+                        <code>rails server</code> <span class="comment"># Or: rails s</span><br>
+                        <code>rails s -p 4000</code> <span class="comment"># Custom port</span><br>
+                        <code>rails s -b 0.0.0.0</code> <span class="comment"># Bind to all interfaces</span>
+                    </div>
+                    <p><code>bin/dev</code> runs CSS/JS build processes alongside Rails server.</p>
+                </div>
+
+                <div class="command-card">
+                    <h3>Rails Console</h3>
+                    <div class="command-box">
+                        <code>rails console</code> <span class="comment"># Or: rails c</span><br>
+                        <code>rails c --sandbox</code> <span class="comment"># Rollback on exit</span><br>
+                        <code>rails c -e production</code> <span class="comment"># Production env</span><br>
+                        <code>rails dbconsole</code> <span class="comment"># Direct DB access</span>
+                    </div>
+                    <p>Interactive Ruby session with full Rails environment loaded.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Naming Conventions Section -->
+        <section class="section">
+            <div class="section-header">
+                <div class="section-icon" style="background: linear-gradient(135deg, var(--accent-purple) 0%, #8957E5 100%);">
+                    <span>📝</span>
+                </div>
+                <h2>Naming Conventions</h2>
+            </div>
+
+            <div class="naming-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Component</th>
+                            <th>Convention</th>
+                            <th>Example</th>
+                            <th>File Location</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="type">Model (class)</td>
+                            <td class="convention">CamelCase, Singular</td>
+                            <td class="example">Product, LineItem, UserProfile</td>
+                            <td>app/models/product.rb</td>
+                        </tr>
+                        <tr>
+                            <td class="type">Model (file)</td>
+                            <td class="convention">snake_case, singular</td>
+                            <td class="example">product.rb, line_item.rb</td>
+                            <td>app/models/</td>
+                        </tr>
+                        <tr>
+                            <td class="type">Database Table</td>
+                            <td class="convention">snake_case, plural</td>
+                            <td class="example">products, line_items, user_profiles</td>
+                            <td>Database</td>
+                        </tr>
+                        <tr>
+                            <td class="type">Controller (class)</td>
+                            <td class="convention">CamelCase, Plural + Controller</td>
+                            <td class="example">ProductsController, LineItemsController</td>
+                            <td>app/controllers/products_controller.rb</td>
+                        </tr>
+                        <tr>
+                            <td class="type">Controller (file)</td>
+                            <td class="convention">snake_case, plural</td>
+                            <td class="example">products_controller.rb</td>
+                            <td>app/controllers/</td>
+                        </tr>
+                        <tr>
+                            <td class="type">View Directory</td>
+                            <td class="convention">snake_case, plural</td>
+                            <td class="example">products/, line_items/</td>
+                            <td>app/views/products/</td>
+                        </tr>
+                        <tr>
+                            <td class="type">View Files</td>
+                            <td class="convention">action_name.html.erb</td>
+                            <td class="example">index.html.erb, show.html.erb</td>
+                            <td>app/views/products/index.html.erb</td>
+                        </tr>
+                        <tr>
+                            <td class="type">Helper</td>
+                            <td class="convention">CamelCase + Helper</td>
+                            <td class="example">ProductsHelper</td>
+                            <td>app/helpers/products_helper.rb</td>
+                        </tr>
+                        <tr>
+                            <td class="type">Migration</td>
+                            <td class="convention">CamelCase (descriptive)</td>
+                            <td class="example">CreateProducts, AddPriceToProducts</td>
+                            <td>db/migrate/20240115_create_products.rb</td>
+                        </tr>
+                        <tr>
+                            <td class="type">Foreign Key</td>
+                            <td class="convention">singular_model_id</td>
+                            <td class="example">user_id, product_id, line_item_id</td>
+                            <td>Database column</td>
+                        </tr>
+                        <tr>
+                            <td class="type">Primary Key</td>
+                            <td class="convention">id (automatic)</td>
+                            <td class="example">id</td>
+                            <td>Database column</td>
+                        </tr>
+                        <tr>
+                            <td class="type">Join Table</td>
+                            <td class="convention">alphabetical_model1_model2</td>
+                            <td class="example">products_users, categories_products</td>
+                            <td>Database</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Routes Section -->
+        <section class="section">
+            <div class="section-header">
+                <div class="section-icon" style="background: linear-gradient(135deg, var(--accent-orange) 0%, var(--accent-yellow) 100%);">
+                    <span>🛤️</span>
+                </div>
+                <h2>Routes & Routing</h2>
+            </div>
+
+            <div class="routes-visual">
+                <div class="route-diagram">
+                    <div class="route-node browser">🌐 Browser Request<br><small>GET /products/1</small></div>
+                    <span class="route-arrow">→</span>
+                    <div class="route-node routes">📋 config/routes.rb<br><small>matches route</small></div>
+                    <span class="route-arrow">→</span>
+                    <div class="route-node controller">⚙️ ProductsController#show<br><small>action called</small></div>
+                </div>
+
+                <div class="routes-code">
+<span class="comment"># config/routes.rb</span>
+Rails.application.routes.<span class="method">draw</span> <span class="keyword">do</span>
+  <span class="comment"># Root route - homepage</span>
+  <span class="method">root</span> <span class="string">"products#index"</span>
+  <span class="comment"># Alternative syntax:</span>
+  <span class="method">root</span> <span class="symbol">to:</span> <span class="string">"inventory#index"</span>
+
+  <span class="comment"># RESTful resource routes (creates all 7 CRUD routes)</span>
+  <span class="method">resources</span> <span class="symbol">:products</span>
+  <span class="method">resources</span> <span class="symbol">:invoices</span>
+  <span class="method">resources</span> <span class="symbol">:customers</span>
+
+  <span class="comment"># Limit routes generated</span>
+  <span class="method">resources</span> <span class="symbol">:articles</span>, <span class="symbol">only:</span> [<span class="symbol">:index</span>, <span class="symbol">:show</span>]
+  <span class="method">resources</span> <span class="symbol">:comments</span>, <span class="symbol">except:</span> [<span class="symbol">:destroy</span>]
+
+  <span class="comment"># Nested resources</span>
+  <span class="method">resources</span> <span class="symbol">:invoices</span> <span class="keyword">do</span>
+    <span class="method">resources</span> <span class="symbol">:line_items</span>
+  <span class="keyword">end</span>
+  <span class="comment"># Creates: /invoices/:invoice_id/line_items</span>
+
+  <span class="comment"># Custom routes</span>
+  <span class="method">get</span> <span class="string">"about"</span>, <span class="symbol">to:</span> <span class="string">"pages#about"</span>
+  <span class="method">get</span> <span class="string">"dashboard"</span>, <span class="symbol">to:</span> <span class="string">"admin#dashboard"</span>, <span class="symbol">as:</span> <span class="symbol">:admin_dashboard</span>
+  <span class="method">post</span> <span class="string">"search"</span>, <span class="symbol">to:</span> <span class="string">"products#search"</span>
+
+  <span class="comment"># Member and collection routes</span>
+  <span class="method">resources</span> <span class="symbol">:products</span> <span class="keyword">do</span>
+    <span class="method">member</span> <span class="keyword">do</span>
+      <span class="method">patch</span> <span class="symbol">:archive</span>  <span class="comment"># /products/:id/archive</span>
+    <span class="keyword">end</span>
+    <span class="method">collection</span> <span class="keyword">do</span>
+      <span class="method">get</span> <span class="symbol">:export</span>    <span class="comment"># /products/export</span>
+    <span class="keyword">end</span>
+  <span class="keyword">end</span>
+
+  <span class="comment"># Namespace for admin area</span>
+  <span class="method">namespace</span> <span class="symbol">:admin</span> <span class="keyword">do</span>
+    <span class="method">resources</span> <span class="symbol">:users</span>
+  <span class="keyword">end</span>
+  <span class="comment"># Creates: /admin/users → Admin::UsersController</span>
+<span class="keyword">end</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- RESTful Actions Section -->
+        <section class="section">
+            <div class="section-header">
+                <div class="section-icon" style="background: linear-gradient(135deg, var(--accent-blue) 0%, #1F6FEB 100%);">
+                    <span>🎯</span>
+                </div>
+                <h2>Controller Actions (RESTful)</h2>
+            </div>
+
+            <div class="restful-grid">
+                <div class="action-card">
+                    <span class="action-badge get">GET</span>
+                    <div class="action-info">
+                        <h4>index</h4>
+                        <p class="path">/products → products#index</p>
+                        <p>List all resources. Typically fetches all records and renders a list view.</p>
+                    </div>
+                </div>
+
+                <div class="action-card">
+                    <span class="action-badge get">GET</span>
+                    <div class="action-info">
+                        <h4>show</h4>
+                        <p class="path">/products/:id → products#show</p>
+                        <p>Display a single resource. Fetches one record by ID.</p>
+                    </div>
+                </div>
+
+                <div class="action-card">
+                    <span class="action-badge get">GET</span>
+                    <div class="action-info">
+                        <h4>new</h4>
+                        <p class="path">/products/new → products#new</p>
+                        <p>Display form for creating a new resource. Initializes empty model instance.</p>
+                    </div>
+                </div>
+
+                <div class="action-card">
+                    <span class="action-badge post">POST</span>
+                    <div class="action-info">
+                        <h4>create</h4>
+                        <p class="path">/products → products#create</p>
+                        <p>Save new resource to database. Receives form data, validates, and persists.</p>
+                    </div>
+                </div>
+
+                <div class="action-card">
+                    <span class="action-badge get">GET</span>
+                    <div class="action-info">
+                        <h4>edit</h4>
+                        <p class="path">/products/:id/edit → products#edit</p>
+                        <p>Display form for editing existing resource. Pre-populates with current data.</p>
+                    </div>
+                </div>
+
+                <div class="action-card">
+                    <span class="action-badge patch">PATCH/PUT</span>
+                    <div class="action-info">
+                        <h4>update</h4>
+                        <p class="path">/products/:id → products#update</p>
+                        <p>Update existing resource in database. Validates and saves changes.</p>
+                    </div>
+                </div>
+
+                <div class="action-card">
+                    <span class="action-badge delete">DELETE</span>
+                    <div class="action-info">
+                        <h4>destroy</h4>
+                        <p class="path">/products/:id → products#destroy</p>
+                        <p>Remove resource from database. Typically redirects after deletion.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Helpers Section -->
+        <section class="section">
+            <div class="section-header">
+                <div class="section-icon" style="background: linear-gradient(135deg, var(--accent-pink) 0%, #DB61A2 100%);">
+                    <span>🔧</span>
+                </div>
+                <h2>Rails View Helpers</h2>
+            </div>
+
+            <div class="helper-grid">
+                <div class="helper-card">
+                    <div class="helper-header">
+                        <div class="helper-icon" style="background: rgba(88, 166, 255, 0.2); color: var(--accent-blue);">🔗</div>
+                        <h3>link_to</h3>
+                    </div>
+                    <div class="helper-body">
+                        <div class="helper-example">
+<span style="color: var(--accent-green);">&lt;%= link_to "Products", products_path %&gt;</span>
+<span style="color: var(--accent-green);">&lt;%= link_to "View", product_path(@product) %&gt;</span>
+<span style="color: var(--accent-green);">&lt;%= link_to "Edit", edit_product_path(@product), class: "btn" %&gt;</span>
+<span style="color: var(--accent-green);">&lt;%= link_to "Delete", @product, method: :delete, data: { turbo_confirm: "Sure?" } %&gt;</span>
+                        </div>
+                        <p>Generates anchor tags with proper Rails paths. Supports HTTP methods and Turbo confirmations.</p>
+                    </div>
+                </div>
+
+                <div class="helper-card">
+                    <div class="helper-header">
+                        <div class="helper-icon" style="background: rgba(63, 185, 80, 0.2); color: var(--accent-green);">💰</div>
+                        <h3>number_to_currency</h3>
+                    </div>
+                    <div class="helper-body">
+                        <div class="helper-example">
+<span style="color: var(--accent-green);">&lt;%= number_to_currency(1234.56) %&gt;</span>
+<span style="color: var(--text-muted);"># → $1,234.56</span>
+
+<span style="color: var(--accent-green);">&lt;%= number_to_currency(1234.56, unit: "R", precision: 2) %&gt;</span>
+<span style="color: var(--text-muted);"># → R1,234.56</span>
+
+<span style="color: var(--accent-green);">&lt;%= number_to_currency(@product.price, locale: :za) %&gt;</span>
+                        </div>
+                        <p>Formats numbers as currency with configurable symbols, precision, and locale support.</p>
+                    </div>
+                </div>
+
+                <div class="helper-card">
+                    <div class="helper-header">
+                        <div class="helper-icon" style="background: rgba(163, 113, 247, 0.2); color: var(--accent-purple);">🖼️</div>
+                        <h3>image_tag</h3>
+                    </div>
+                    <div class="helper-body">
+                        <div class="helper-example">
+<span style="color: var(--accent-green);">&lt;%= image_tag "logo.png" %&gt;</span>
+<span style="color: var(--accent-green);">&lt;%= image_tag "products/item.jpg", alt: "Product", class: "thumbnail" %&gt;</span>
+<span style="color: var(--accent-green);">&lt;%= image_tag @product.image.variant(:thumb) %&gt;</span>
+<span style="color: var(--text-muted);"># For Active Storage</span>
+                        </div>
+                        <p>Generates img tags for images in app/assets/images or Active Storage attachments.</p>
+                    </div>
+                </div>
+
+                <div class="helper-card">
+                    <div class="helper-header">
+                        <div class="helper-icon" style="background: rgba(240, 136, 62, 0.2); color: var(--accent-orange);">📝</div>
+                        <h3>form_with</h3>
+                    </div>
+                    <div class="helper-body">
+                        <div class="helper-example">
+<span style="color: var(--accent-green);">&lt;%= form_with model: @product do |f| %&gt;</span>
+  <span style="color: var(--accent-green);">&lt;%= f.label :name %&gt;</span>
+  <span style="color: var(--accent-green);">&lt;%= f.text_field :name, class: "form-control" %&gt;</span>
+  
+  <span style="color: var(--accent-green);">&lt;%= f.label :price %&gt;</span>
+  <span style="color: var(--accent-green);">&lt;%= f.number_field :price, step: 0.01 %&gt;</span>
+  
+  <span style="color: var(--accent-green);">&lt;%= f.select :category_id, Category.all.pluck(:name, :id) %&gt;</span>
+  <span style="color: var(--accent-green);">&lt;%= f.check_box :active %&gt;</span>
+  <span style="color: var(--accent-green);">&lt;%= f.text_area :description, rows: 5 %&gt;</span>
+  
+  <span style="color: var(--accent-green);">&lt;%= f.submit "Save", class: "btn btn-primary" %&gt;</span>
+<span style="color: var(--accent-green);">&lt;% end %&gt;</span>
+                        </div>
+                        <p>Generates forms bound to model objects. Auto-detects create vs update based on record persistence.</p>
+                    </div>
+                </div>
+
+                <div class="helper-card">
+                    <div class="helper-header">
+                        <div class="helper-icon" style="background: rgba(210, 153, 34, 0.2); color: var(--accent-yellow);">📋</div>
+                        <h3>Collection Helpers</h3>
+                    </div>
+                    <div class="helper-body">
+                        <div class="helper-example">
+<span style="color: var(--accent-green);">&lt;%= render @products %&gt;</span>
+<span style="color: var(--text-muted);"># Renders _product.html.erb for each</span>
+
+<span style="color: var(--accent-green);">&lt;%= render partial: "product", collection: @products %&gt;</span>
+
+<span style="color: var(--accent-green);">&lt;%= collection_select :invoice, :customer_id, Customer.all, :id, :name %&gt;</span>
+
+<span style="color: var(--accent-green);">&lt;%= options_for_select([["Small", 1], ["Large", 2]], @product.size) %&gt;</span>
+                        </div>
+                        <p>Efficiently render collections and generate select options from model data.</p>
+                    </div>
+                </div>
+
+                <div class="helper-card">
+                    <div class="helper-header">
+                        <div class="helper-icon" style="background: rgba(204, 52, 45, 0.2); color: var(--ruby-red);">🔢</div>
+                        <h3>Number Helpers</h3>
+                    </div>
+                    <div class="helper-body">
+                        <div class="helper-example">
+<span style="color: var(--accent-green);">&lt;%= number_with_delimiter(1234567) %&gt;</span>
+<span style="color: var(--text-muted);"># → 1,234,567</span>
+
+<span style="color: var(--accent-green);">&lt;%= number_with_precision(3.14159, precision: 2) %&gt;</span>
+<span style="color: var(--text-muted);"># → 3.14</span>
+
+<span style="color: var(--accent-green);">&lt;%= number_to_percentage(75.5) %&gt;</span>
+<span style="color: var(--text-muted);"># → 75.500%</span>
+
+<span style="color: var(--accent-green);">&lt;%= number_to_human(1234567) %&gt;</span>
+<span style="color: var(--text-muted);"># → 1.23 Million</span>
+                        </div>
+                        <p>Format numbers with delimiters, precision, percentages, and human-readable formats.</p>
+                    </div>
+                </div>
+
+                <div class="helper-card">
+                    <div class="helper-header">
+                        <div class="helper-icon" style="background: rgba(88, 166, 255, 0.2); color: var(--accent-blue);">📅</div>
+                        <h3>Date/Time Helpers</h3>
+                    </div>
+                    <div class="helper-body">
+                        <div class="helper-example">
+<span style="color: var(--accent-green);">&lt;%= time_ago_in_words(@product.created_at) %&gt;</span>
+<span style="color: var(--text-muted);"># → "3 days ago"</span>
+
+<span style="color: var(--accent-green);">&lt;%= distance_of_time_in_words(Time.now, @invoice.due_date) %&gt;</span>
+
+<span style="color: var(--accent-green);">&lt;%= @order.created_at.strftime("%B %d, %Y") %&gt;</span>
+<span style="color: var(--text-muted);"># → "January 15, 2024"</span>
+
+<span style="color: var(--accent-green);">&lt;%= l(@product.updated_at, format: :short) %&gt;</span>
+                        </div>
+                        <p>Format dates and calculate time differences in human-readable formats.</p>
+                    </div>
+                </div>
+
+                <div class="helper-card">
+                    <div class="helper-header">
+                        <div class="helper-icon" style="background: rgba(163, 113, 247, 0.2); color: var(--accent-purple);">✨</div>
+                        <h3>Content Helpers</h3>
+                    </div>
+                    <div class="helper-body">
+                        <div class="helper-example">
+<span style="color: var(--accent-green);">&lt;%= truncate(@product.description, length: 100) %&gt;</span>
+
+<span style="color: var(--accent-green);">&lt;%= simple_format(@product.notes) %&gt;</span>
+<span style="color: var(--text-muted);"># Converts \n to &lt;br&gt; and wraps in &lt;p&gt;</span>
+
+<span style="color: var(--accent-green);">&lt;%= sanitize(@content, tags: %w(p br strong em)) %&gt;</span>
+
+<span style="color: var(--accent-green);">&lt;%= raw(@html_content) %&gt;</span>
+<span style="color: var(--text-muted);"># Outputs unescaped HTML (use carefully!)</span>
+                        </div>
+                        <p>Manipulate and safely render text and HTML content.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Rails Components Section -->
+        <section class="section">
+            <div class="section-header">
+                <div class="section-icon" style="background: var(--gradient-ruby);">
+                    <span>📦</span>
+                </div>
+                <h2>Rails Components</h2>
+            </div>
+
+            <div class="component-grid">
+                <div class="component-card hotwire">
+                    <h3>⚡ Hotwire</h3>
+                    <p class="description">The default Rails 7 frontend stack combining Turbo and Stimulus for fast, SPA-like experiences without writing JavaScript for common interactions.</p>
+                    <div class="usage">
+<span style="color: var(--text-muted);"># Gemfile</span>
+gem "turbo-rails"
+gem "stimulus-rails"
+
+<span style="color: var(--text-muted);"># Install</span>
+rails turbo:install
+rails stimulus:install
+                    </div>
+                </div>
+
+                <div class="component-card turbo">
+                    <h3>🚀 Turbo</h3>
+                    <p class="description">Navigate without full page reloads. Turbo Drive intercepts links, Turbo Frames update page sections, Turbo Streams broadcast changes in real-time.</p>
+                    <div class="usage">
+<span style="color: var(--text-muted);"># Turbo Frame in view</span>
+&lt;%= turbo_frame_tag "products" do %&gt;
+  &lt;%= render @products %&gt;
+&lt;% end %&gt;
+
+<span style="color: var(--text-muted);"># Turbo Stream response</span>
+&lt;%= turbo_stream.append "products", @product %&gt;
+&lt;%= turbo_stream.replace "product_1", @product %&gt;
+                    </div>
+                </div>
+
+                <div class="component-card activerecord">
+                    <h3>🗄️ Active Record</h3>
+                    <p class="description">ORM layer mapping Ruby objects to database tables. Handles queries, validations, associations, callbacks, and migrations.</p>
+                    <div class="usage">
+<span style="color: var(--text-muted);"># Model with validations & associations</span>
+class Product < ApplicationRecord
+  belongs_to :category
+  has_many :line_items
+  
+  validates :name, presence: true
+  validates :price, numericality: { greater_than: 0 }
+  
+  scope :active, -> { where(active: true) }
+end
+
+<span style="color: var(--text-muted);"># Queries</span>
+Product.where(active: true).order(:name).limit(10)
+Product.find_by(sku: "ABC123")
+                    </div>
+                </div>
+
+                <div class="component-card actioncable">
+                    <h3>📡 Action Cable</h3>
+                    <p class="description">WebSocket framework for real-time features. Enables live updates, chat, notifications, and collaborative editing.</p>
+                    <div class="usage">
+<span style="color: var(--text-muted);"># Generate channel</span>
+rails g channel Notifications
+
+<span style="color: var(--text-muted);"># app/channels/notifications_channel.rb</span>
+class NotificationsChannel < ApplicationCable::Channel
+  def subscribed
+    stream_from "notifications_#{current_user.id}"
+  end
+end
+
+<span style="color: var(--text-muted);"># Broadcast from anywhere</span>
+ActionCable.server.broadcast(
+  "notifications_#{user.id}",
+  { message: "New order received!" }
+)
+                    </div>
+                </div>
+
+                <div class="component-card activestorage">
+                    <h3>📎 Active Storage</h3>
+                    <p class="description">File upload handling for local disk, Amazon S3, Google Cloud, Azure. Supports image variants, direct uploads, and file analysis.</p>
+                    <div class="usage">
+<span style="color: var(--text-muted);"># Setup</span>
+rails active_storage:install
+rails db:migrate
+
+<span style="color: var(--text-muted);"># Model</span>
+class Product < ApplicationRecord
+  has_one_attached :image
+  has_many_attached :documents
+end
+
+<span style="color: var(--text-muted);"># View</span>
+&lt;%= image_tag @product.image.variant(resize_to_limit: [300, 300]) %&gt;
+&lt;%= f.file_field :image, direct_upload: true %&gt;
+                    </div>
+                </div>
+
+                <div class="component-card authentication">
+                    <h3>🔐 Authentication (Rails 8)</h3>
+                    <p class="description">Built-in authentication generator in Rails 8. Creates User model, sessions, password resets, and secure defaults.</p>
+                    <div class="usage">
+<span style="color: var(--text-muted);"># Generate authentication</span>
+rails generate authentication
+
+<span style="color: var(--text-muted);"># Creates:</span>
+- User model with has_secure_password
+- SessionsController
+- PasswordsController  
+- Authentication concern
+- Views for login/signup/reset
+
+<span style="color: var(--text-muted);"># Controller concern</span>
+class ApplicationController < ActionController::Base
+  include Authentication
+end
+                    </div>
+                </div>
+
+                <div class="component-card actionmailer">
+                    <h3>📧 Action Mailer</h3>
+                    <p class="description">Email sending framework with HTML/text templates, attachments, previews, and delivery configuration for various providers.</p>
+                    <div class="usage">
+<span style="color: var(--text-muted);"># Generate mailer</span>
+rails g mailer Order confirmation shipped
+
+<span style="color: var(--text-muted);"># app/mailers/order_mailer.rb</span>
+class OrderMailer < ApplicationMailer
+  def confirmation(order)
+    @order = order
+    mail(to: order.email, subject: "Order Confirmed")
+  end
+end
+
+<span style="color: var(--text-muted);"># Send email</span>
+OrderMailer.confirmation(@order).deliver_later
+                    </div>
+                </div>
+
+                <div class="component-card activejob">
+                    <h3>⏱️ Active Job</h3>
+                    <p class="description">Background job framework. Process async tasks like emails, reports, imports. Works with Sidekiq, Resque, Solid Queue, etc.</p>
+                    <div class="usage">
+<span style="color: var(--text-muted);"># Generate job</span>
+rails g job ProcessOrder
+
+<span style="color: var(--text-muted);"># app/jobs/process_order_job.rb</span>
+class ProcessOrderJob < ApplicationJob
+  queue_as :default
+  
+  def perform(order_id)
+    order = Order.find(order_id)
+    order.process!
+  end
+end
+
+<span style="color: var(--text-muted);"># Enqueue job</span>
+ProcessOrderJob.perform_later(@order.id)
+ProcessOrderJob.set(wait: 1.hour).perform_later(@order.id)
+                    </div>
+                </div>
+
+                <div class="component-card sessions">
+                    <h3>🔑 Sessions</h3>
+                    <p class="description">Store user data across requests. Configurable storage backends: cookies (default), cache, database, Redis.</p>
+                    <div class="usage">
+<span style="color: var(--text-muted);"># Store in session</span>
+session[:user_id] = @user.id
+session[:cart] = []
+
+<span style="color: var(--text-muted);"># Read from session</span>
+current_user_id = session[:user_id]
+
+<span style="color: var(--text-muted);"># Clear session</span>
+session.delete(:user_id)
+reset_session  <span style="color: var(--text-muted);"># Clear everything</span>
+
+<span style="color: var(--text-muted);"># config/initializers/session_store.rb</span>
+Rails.application.config.session_store :cookie_store,
+  key: '_myapp_session',
+  expire_after: 14.days
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quick Reference -->
+        <div class="quick-ref">
+            <h2>⚡ Quick Reference</h2>
+            <div class="quick-ref-grid">
+                <div class="quick-item">
+                    <span class="label">Start server</span>
+                    <span class="command">bin/dev</span>
+                </div>
+                <div class="quick-item">
+                    <span class="label">Console</span>
+                    <span class="command">rails c</span>
+                </div>
+                <div class="quick-item">
+                    <span class="label">Routes list</span>
+                    <span class="command">rails routes</span>
+                </div>
+                <div class="quick-item">
+                    <span class="label">Run migrations</span>
+                    <span class="command">rails db:migrate</span>
+                </div>
+                <div class="quick-item">
+                    <span class="label">Rollback</span>
+                    <span class="command">rails db:rollback</span>
+                </div>
+                <div class="quick-item">
+                    <span class="label">Reset database</span>
+                    <span class="command">rails db:reset</span>
+                </div>
+                <div class="quick-item">
+                    <span class="label">Generate model</span>
+                    <span class="command">rails g model Name</span>
+                </div>
+                <div class="quick-item">
+                    <span class="label">Generate controller</span>
+                    <span class="command">rails g controller Names</span>
+                </div>
+                <div class="quick-item">
+                    <span class="label">Generate scaffold</span>
+                    <span class="command">rails g scaffold Name</span>
+                </div>
+                <div class="quick-item">
+                    <span class="label">Run tests</span>
+                    <span class="command">rails test</span>
+                </div>
+                <div class="quick-item">
+                    <span class="label">Check routes</span>
+                    <span class="command">rails routes -g product</span>
+                </div>
+                <div class="quick-item">
+                    <span class="label">DB console</span>
+                    <span class="command">rails dbconsole</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>Ruby on Rails Cheat Sheet • Created with <span class="heart">❤️</span> for Michael Blake at Fastell Industrial Supplies</p>
+        </footer>
+    </div>
+</body>
+</html>
