@@ -69,8 +69,8 @@ body {
 }
 
 .ruby-gem {
-    width: 80px;
-    height: 80px;
+    width: auto;
+    height: 100px;
 }
 
 .hero h1 {
@@ -940,8 +940,8 @@ body {
 }
 
 .nav-brand svg {
-    width: 32px;
-    height: 32px;
+    width: auto;
+    height: 24px;
 }
 
 .nav-links {
